@@ -1,0 +1,37 @@
+<div class="uk-card uk-card-body">
+  <h3 id="text" class="uk-card-title">Introduce the github repo url you want to know info about</h3>
+  <div id="alert">{{alertText}}</div>
+  <form>
+    <fieldset class="uk-fieldset">
+      <div class="uk-margin">
+        <input class="uk-input" id="owner" name="owner" type="text" required [(ngModel)]="owner">
+        <div><br></div>
+        <input class="uk-input" id="repo" name="repo" type="text" required [(ngModel)]="repo">
+      </div>
+      <button (click)="sendData()" class="uk-button uk-button-primary">Obtain stats</button>
+    </fieldset>
+  </form>
+  <ul class="uk-list">
+    <li>
+      <div class="uk-card uk-card-default uk-card-body uk-width-1-2">
+        <p>Lo del lorem ipsum dolor sit amed kaskljdakjh skkajshdka jhska ksjhd a kajshdla kaj ak ñaa klkjsha </p>
+        <button class="uk-button uk-button-default" type="button">Click</button>
+        <div uk-drop="mode: click">
+          <div class="uk-card uk-card-body uk-card-default">
+            <!-- <button class="uk-drop-close" type="button" uk-close></button> -->
+            <ul>
+              <li>Config</li>
+              <li>Edit</li>
+              <li>Delete</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </li>
+    <p>Result of the db conection</p>
+    <p>{{items}}</p>
+    <li *ngFor="let item of items">
+      <div class="uk-card uk-card-default uk-card-body">Repo {{item}}</div>
+    </li>
+  </ul>
+</div>
