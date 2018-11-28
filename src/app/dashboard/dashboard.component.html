@@ -4,9 +4,9 @@
   <form>
     <fieldset class="uk-fieldset">
       <div class="uk-margin">
-        <input class="uk-input" id="owner" name="owner" type="text" required [(ngModel)]="owner">
+        <input class="uk-input" id="owner" name="owner" type="text" required [(ngModel)]="owner" placeholder="Owner name">
         <div><br></div>
-        <input class="uk-input" id="repo" name="repo" type="text" required [(ngModel)]="repo">
+        <input class="uk-input" id="repo" name="repo" type="text" required [(ngModel)]="repo" placeholder="Repository name">
       </div>
       <button (click)="sendData()" class="uk-button uk-button-primary">Obtain stats</button>
     </fieldset>
