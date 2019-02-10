@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { FormService } from '../services/form.service';
 import * as UIkit from 'uikit';
 
 @Component({
@@ -14,7 +13,7 @@ export class DashboardComponent implements OnInit {
   public owner: string;
   public repo: string;
   public alertText: string;
-  constructor(private formService: FormService) { }
+  constructor() { }
 
   ngOnInit() {
   }
@@ -32,6 +31,7 @@ export class DashboardComponent implements OnInit {
       });
       return;
     }
+    /*
     this.formService.getCommitsOfRepo(this.owner, this.repo)
       .then((data) => {
         UIkit.notification({
@@ -46,6 +46,7 @@ export class DashboardComponent implements OnInit {
           timeout: 5000
         });
       });
+      */
   }
 
 

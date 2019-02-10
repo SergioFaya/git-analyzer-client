@@ -1,5 +1,6 @@
+<!-- template scheme -->
 <div (window:resize)="onResize($event)"></div>
 <div ng-init="ngOnInit($event)"></div>
 <app-nav-lateral *ngIf="showLateral"></app-nav-lateral>
-<app-nav-full *ngIf="showFull"></app-nav-full>
+<app-nav-full [loginUrl]="loginUrl" [login]="loginFunc" *ngIf="showFull"></app-nav-full>
 <app-dashboard></app-dashboard>
