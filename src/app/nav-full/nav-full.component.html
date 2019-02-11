@@ -1,16 +1,27 @@
 <div id="nav-greater-960">
-  <nav class="uk-navbar-container" uk-navbar>
-      <div class="uk-navbar-left">
+    <nav class="uk-navbar-container" uk-navbar>
+        <div class="uk-navbar-left">
+            <!--
           <ul class="uk-navbar-nav">
               <li class="uk-active"><a href="#">Active</a></li>
               <li class="uk-active"><a href="#">Item</a></li>
           </ul>
-      </div>
-      <div class="uk-navbar-right">
-          <ul class="uk-navbar-nav">
-              <li>
-                  <a (click)="login()" href = "{{loginUrl}}" uk-icon="icon: user"> Log in</a>
-                  <!--<a (click)="login()" href = "" uk-icon="icon: user"></a>-->
+          -->
+            <div class="uk-position-center">
+                <p>El login no funciona, establecer token de usuario (largo) y de github (corto)</p>
+                <label for="accessToken"> Token acceso:</label>
+                <input type="text" id="accessToken" [(ngModel)]="accessToken">
+                <label for="githubToken"> Token github:</label>
+                <input type="text" id="githubToken" [(ngModel)]="githubToken">
+                <button (click)= "storeTokens()"> Set Tokens</button>
+            </div>
+        </div>
+        <div class="uk-navbar-right">
+            <ul class="uk-navbar-nav">
+                <li>
+                    <a target="_blank"  rel="noopener noreferrer" href="{{loginUrl}}" uk-icon="icon: user"> Log in</a>
+                    <!--<a (click)="login()" href = "" uk-icon="icon: user"></a>-->
+                    <!--
                   <div class="uk-navbar-dropdown">
                       <ul class="uk-nav uk-navbar-dropdown-nav">
                           <li class="uk-active"><a href="#">Active</a></li>
@@ -22,8 +33,9 @@
                           <li><a href="#">Item</a></li>
                       </ul>
                   </div>
-              </li>
-          </ul>
-      </div>
-  </nav>
+                  -->
+                </li>
+            </ul>
+        </div>
+    </nav>
 </div>

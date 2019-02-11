@@ -10,9 +10,18 @@ export class NavFullComponent implements OnInit {
   // reference to parent class function
   @Input() login: Function;
   @Input() loginUrl: string;
+
+  githubToken: string;
+  accessToken: string;
+
   constructor() { }
 
   ngOnInit() {
+  }
+
+  storeTokens() {
+    localStorage.setItem('githubToken', this.githubToken);
+    localStorage.setItem('accessToken', this.accessToken);
   }
 
 }

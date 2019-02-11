@@ -55,7 +55,7 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     this.size = window.innerWidth;
     this.adaptToSize(this.size);
-    // this.login();
+    this.login();
   }
 
   onResize(event): void {
