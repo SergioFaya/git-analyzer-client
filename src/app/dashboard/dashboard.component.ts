@@ -1,6 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import * as UIkit from 'uikit';
+import { notify } from '../util/util';
 import * as superagent from 'superagent';
+
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
@@ -9,22 +11,24 @@ import * as superagent from 'superagent';
 
 export class DashboardComponent implements OnInit {
 
-  imageUrl: string;
   public alertText: string;
+  public datos: Array<any>;
   constructor() { }
 
   ngOnInit() {
-
+    this.getReposOfInstallation();
   }
 
-  sendData() {
-    superagent.get('http://localhost:3001/user/info')
-    .set('x-access-token', localStorage.getItem('accessToken'))
-    .set('x-github-token', localStorage.getItem('githubToken'))
-    .then((result: any) => {
-        this.alertText = result.body.user;
-        this.imageUrl = result.body.user.avatarUrl;
-    });
+  private getReposOfInstallation() {
+    superagent
+      .get('http://localhost:3001/repos')
+      .set('x-access-token', localStorage.getItem('accessToken'))
+      .set('x-github-token', localStorage.getItem('githubToken'))
+      .then((result) => {
+        this.datos = result.body.repos;
+      }).catch((err) => {
+        console.log(err);
+      });
   }
 
 

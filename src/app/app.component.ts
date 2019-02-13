@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import * as UIkit from 'uikit';
 import { Observable } from 'rxjs';
 
+import { notify } from './util/util';
 import * as superagent from 'superagent';
 
 @Component({
@@ -46,8 +47,8 @@ export class AppComponent implements OnInit {
       .then(result => {
         this.loginUrl = result.body.data;
       }).catch(err => {
-        this.notify('error )>');
-        this.notify(err.message);
+        notify('error =>');
+        notify(err.message);
       });
 
   }
@@ -73,12 +74,5 @@ export class AppComponent implements OnInit {
     }
   }
 
-  private notify(data: string): void {
-    UIkit.notification({
-      message: data,
-      status: 'primary',
-      timeout: 5000
-    });
-  }
 }
 

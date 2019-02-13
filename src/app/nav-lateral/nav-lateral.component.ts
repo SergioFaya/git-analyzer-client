@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { notify } from '../util/util';
 
 @Component({
   selector: 'app-nav-lateral',

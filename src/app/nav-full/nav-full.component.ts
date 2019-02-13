@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
-import * as UIkit from 'uikit';
+import * as superagent from 'superagent';
+import { notify } from '../util/util';
 
 @Component({
   selector: 'app-nav-full',
@@ -10,6 +11,9 @@ export class NavFullComponent implements OnInit {
   // reference to parent class function
   @Input() login: Function;
   @Input() loginUrl: string;
+
+  public imageUrl: string;
+  public logged: boolean;
 
   githubToken: string;
   accessToken: string;
@@ -22,6 +26,15 @@ export class NavFullComponent implements OnInit {
   storeTokens() {
     localStorage.setItem('githubToken', this.githubToken);
     localStorage.setItem('accessToken', this.accessToken);
+
+    superagent.get('http://localhost:3001/user/info')
+      .set('x-access-token', localStorage.getItem('accessToken'))
+      .set('x-github-token', localStorage.getItem('githubToken'))
+      .then((result: any) => {
+        this.imageUrl = result.body.user.avatarUrl;
+        this.logged = true;
+        notify(`Hola ${result.body.user.login}-${result.body.user.email}`);
+      });
   }
 
 }

@@ -1,6 +1,7 @@
 <div class="uk-card uk-card-body">
   <div id="alert">{{alertText}}</div>
-  <img src="{{imageUrl}}" alt="profile-image">
-
-  <button (click)= "sendData()">Make user request</button>
+  <p>Repos:</p>
+  <div *ngFor="let item of datos;" id="datos">
+    <p>{{item.id}}-{{item.full_name}}</p>
+  </div>
 </div>
