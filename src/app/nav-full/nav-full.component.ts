@@ -33,6 +33,10 @@ export class NavFullComponent implements OnInit {
       .then((result: any) => {
         this.imageUrl = result.body.user.avatarUrl;
         this.logged = true;
+        localStorage.setItem('imageUrl', result.body.user.avatarUrl);
+        localStorage.setItem('email', result.body.user.email);
+        localStorage.setItem('login', result.body.user.login);
+        localStorage.setItem('userId', result.body.user.userId);
         notify(`Hola ${result.body.user.login}-${result.body.user.email}`);
       });
   }

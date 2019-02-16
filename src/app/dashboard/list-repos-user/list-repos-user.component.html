@@ -1,0 +1,14 @@
+<div *ngFor="let item of datos;">
+  <div class="uk-card uk-card-default m-3">
+    <h3 class="uk-card-title">{{item.full_name}}</h3>
+    <h4>Developers</h4>
+    <ul>
+      <li></li>
+
+    </ul>
+    <p uk-margin>
+        <button (click)='getUserRepoByName(item.name)' class="uk-button uk-button-secondary">See detailed</button>
+        <a class="uk-button uk-button-primary" [href]="item.html_url">See on github</a>
+    </p>
+  </div>
+</div>

@@ -12,24 +12,11 @@ import * as superagent from 'superagent';
 export class DashboardComponent implements OnInit {
 
   public alertText: string;
-  public datos: Array<any>;
+  public listReposDisabled: boolean;
   constructor() { }
 
   ngOnInit() {
-    this.getReposOfInstallation();
+    this.listReposDisabled = false;
   }
-
-  private getReposOfInstallation() {
-    superagent
-      .get('http://localhost:3001/repos')
-      .set('x-access-token', localStorage.getItem('accessToken'))
-      .set('x-github-token', localStorage.getItem('githubToken'))
-      .then((result) => {
-        this.datos = result.body.repos;
-      }).catch((err) => {
-        console.log(err);
-      });
-  }
-
 
 }

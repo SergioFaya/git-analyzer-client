@@ -1,7 +1,7 @@
-<div class="uk-card uk-card-body">
+<div class="uk-container">
+
   <div id="alert">{{alertText}}</div>
-  <p>Repos:</p>
-  <div *ngFor="let item of datos;" id="datos">
-    <p>{{item.id}}-{{item.full_name}}</p>
-  </div>
+  <app-list-repos-user *ngIf="listReposDisabled"></app-list-repos-user>
+
+
 </div>

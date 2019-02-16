@@ -9,6 +9,8 @@ import { Http } from '@angular/http';
 import { NavFullComponent } from './nav-full/nav-full.component';
 import { NavLateralComponent } from './nav-lateral/nav-lateral.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ListReposUserComponent } from './dashboard/list-repos-user/list-repos-user.component';
+import { RepoInformationComponent } from './dashboard/list-repos-user/repo-information/repo-information.component';
 
 
 @NgModule({
@@ -16,7 +18,9 @@ import { DashboardComponent } from './dashboard/dashboard.component';
     AppComponent,
     NavFullComponent,
     NavLateralComponent,
-    DashboardComponent
+    DashboardComponent,
+    ListReposUserComponent,
+    RepoInformationComponent
   ],
   imports: [
     BrowserModule,
