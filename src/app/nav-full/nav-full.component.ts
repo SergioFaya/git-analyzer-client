@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import * as superagent from 'superagent';
 import { notify } from '../util/util';
+import { DataService } from '../services/DisplayEvents/display-data.service';
 
 @Component({
   selector: 'app-nav-full',
@@ -11,34 +12,36 @@ export class NavFullComponent implements OnInit {
   // reference to parent class function
   @Input() login: Function;
   @Input() loginUrl: string;
+  imageUrl: string;
+  logged: boolean;
 
-  public imageUrl: string;
-  public logged: boolean;
-
-  githubToken: string;
-  accessToken: string;
-
-  constructor() { }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    // subscripcion a nuevos cambios
+    this.dataService.logged.subscribe((logged) => {
+      this.logged = logged;
+    });
+    this.dataService.image.subscribe((url) => {
+      this.imageUrl = url;
+    });
+
+    // cambios en caso de refresh
+    this.imageUrl = localStorage.getItem('imageUrl');
+    this.logged = localStorage.getItem('logged') === 'logged' ? true : false;
   }
 
-  storeTokens() {
-    localStorage.setItem('githubToken', this.githubToken);
-    localStorage.setItem('accessToken', this.accessToken);
+  // dashboard content
 
-    superagent.get('http://localhost:3001/user/info')
-      .set('x-access-token', localStorage.getItem('accessToken'))
-      .set('x-github-token', localStorage.getItem('githubToken'))
-      .then((result: any) => {
-        this.imageUrl = result.body.user.avatarUrl;
-        this.logged = true;
-        localStorage.setItem('imageUrl', result.body.user.avatarUrl);
-        localStorage.setItem('email', result.body.user.email);
-        localStorage.setItem('login', result.body.user.login);
-        localStorage.setItem('userId', result.body.user.userId);
-        notify(`Hola ${result.body.user.login}-${result.body.user.email}`);
-      });
+  changeDashboardContent(dashboardContent: string) {
+    this.dataService.showDashboard(dashboardContent);
   }
+
+  displayRepoList() {
+    this.changeDashboardContent(this.dataService.repoList);
+  }
+
+
+  // dashboard content
 
 }

@@ -1,7 +1,20 @@
+<div *ngIf="showTokenForm" class="">
+  <p>El login no está terminado, para loggearse:</p>
+  <ul>
+    <li>Click en el nav en el boton de login</li>
+    <li>Autenticarse con usuario y contraseña de github</li>
+    <li>Copiar el token del json devuelto en la autenticacion en el primer checkbox</li>
+    <li>Copiar el accesstoken del json devuelto en la autenticacion en el segundo checkbox</li>
+  </ul>
+  <label for="accessToken"> Token:</label>
+  <input type="text" id="accessToken" [(ngModel)]="accessToken">
+  <label for="githubToken"> Access Token:</label>
+  <input type="text" id="githubToken" [(ngModel)]="githubToken">
+  <button class="uk-button uk-button-primary" (click)="storeToken()"> Establecer Tokens</button>
+</div>
 <div class="uk-container">
-
   <div id="alert">{{alertText}}</div>
-  <app-list-repos-user *ngIf="listReposDisabled"></app-list-repos-user>
-
+  <app-list-repos-user *ngIf="showRepos"></app-list-repos-user>
+  <app-repo-details *ngIf="showDetailedRepo"></app-repo-details>
 
 </div>

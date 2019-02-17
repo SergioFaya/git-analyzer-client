@@ -3,7 +3,7 @@
         <div class="uk-navbar-left">
             <ul class="uk-navbar-nav">
                 <li>
-                    <button class="uk-button uk-button-secondary" (click)="listReposDisabled = !listReposDisabled;">List
+                    <button class="uk-button uk-button-secondary" (click)="displayRepoList()">List
                         Repositories</button>
                 </li>
                 <!--
@@ -12,18 +12,9 @@
             </ul>
         </div>
         <div class="uk-navbar-right">
-            <div class="uk-position-center">
-                <p>El login no funciona, establecer token de usuario (largo) y de github (corto)</p>
-                <label for="accessToken"> Token acceso:</label>
-                <input type="text" id="accessToken" [(ngModel)]="accessToken">
-                <label for="githubToken"> Token github:</label>
-                <input type="text" id="githubToken" [(ngModel)]="githubToken">
-                <button (click)="storeTokens()"> Establecer Tokens para usuario</button>
-            </div>
             <ul class="uk-navbar-nav">
                 <li>
-                    <img *ngIf="logged" class="uk-icon-button uk-margin-small-right" src="{{imageUrl}}" alt="profile-image"
-                        width="100px" height="100px" style="padding: 20 0 20 0" />
+                    <img *ngIf="logged" class="uk-icon-button uk-margin-small-right uk-margin-small-top uk-margin-small-bottom" src="{{imageUrl}}" alt="profile-image"/>
 
                     <a *ngIf="!logged" target="blank" rel="noopener noreferrer" href="{{loginUrl}}" uk-icon="icon: user">
                         Log in</a>

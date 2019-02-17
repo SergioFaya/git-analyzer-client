@@ -5,14 +5,15 @@ import { Observable } from 'rxjs';
 
 import { notify } from './util/util';
 import * as superagent from 'superagent';
+import { DataService } from './services/DisplayEvents/display-data.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit {
 
+export class AppComponent implements OnInit {
   size: number;
   showLateral: boolean;
   showFull: boolean;
@@ -20,25 +21,19 @@ export class AppComponent implements OnInit {
   readonly AUTH_SERVICE_URL = 'http://localhost:3000';
   readonly SERVER_SERVICE_URL = 'http://localhost:3001';
 
-  private access_token: string;
-  private github_access_token: string;
   loginUrl: string;
 
-  get accessToken(): string {
-    return this.access_token;
-  }
-
-  get githubAccessToken(): string {
-    return this.github_access_token;
-  }
-
-  constructor(private http: HttpClient) { }
+  constructor(private dataService: DataService) { }
 
   /**
    * Enlaza con la template el método login
    */
   get loginFunc() {
     return this.login.bind(this);
+  }
+
+  get storeTokensFunc() {
+    return this.storeTokens.bind(this);
   }
 
   login() {
@@ -72,6 +67,25 @@ export class AppComponent implements OnInit {
       this.showLateral = false;
       this.showFull = true;
     }
+  }
+
+  // login cutre temporal
+
+  storeTokens(accessToken: string, githubToken: string) {
+    localStorage.setItem('githubToken', githubToken);
+    localStorage.setItem('accessToken', accessToken);
+
+    superagent.get('http://localhost:3001/user/info')
+      .set('x-access-token', localStorage.getItem('accessToken'))
+      .set('x-github-token', localStorage.getItem('githubToken'))
+      .then((result: any) => {
+        this.dataService.loggedUser(true);
+        this.dataService.imageUrlContent(result.body.user.avatarUrl);
+        localStorage.setItem('email', result.body.user.email);
+        localStorage.setItem('login', result.body.user.login);
+        localStorage.setItem('userId', result.body.user.userId);
+        notify(`Hola ${result.body.user.login}-${result.body.user.email}`);
+      });
   }
 
 }
