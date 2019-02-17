@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ChangeDetectorRef, OnDestroy } from '@angular/core';
 import { notify } from '../../util/util';
 import * as superagent from 'superagent';
 import { DataService } from '../../services/DisplayEvents/display-data.service';
@@ -12,13 +12,12 @@ import { ViewChild, ElementRef } from '@angular/core';
   templateUrl: './repo-details.component.html',
   styleUrls: ['./repo-details.component.scss']
 })
-export class RepoDetailsComponent implements OnInit, AfterViewInit {
+export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   repo: any;
   contributors: any;
   labelsPre = [];
   dataPre = [];
   colors = [];
-
 
   insertedLines = [];
   removedLines = [];
@@ -30,7 +29,9 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit {
   myChart2: any;
   myChart3: any;
 
-  constructor(private dataService: DataService) { this.init(); }
+  constructor(private dataService: DataService) {
+    this.init();
+  }
 
   // Somewhere under the class constructor we want to wait for our view
   // to initialize
@@ -40,6 +41,12 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit {
 
   // change get elemet by id por tag #canvas
   ngOnInit() {
+    this.colors = [];
+    let i = 0;
+    while (i < 15) {
+      this.colors.push(this.getRandomColor());
+      i++;
+    }
     this.dataService.repo.subscribe((repo) => {
       this.repo = repo;
       this.init();
@@ -52,14 +59,38 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit {
     this.insertedLines = [];
     this.labelsPre = [];
     this.removedLines = [];
-    this.colors = [];
-    // -
+    // Destroy elimina el binding con el html
+  }
+
+  ngOnDestroy(): void {
+    // intentar el binding de angular y sino crear el canvas cada vez 
+    // que cree el componente y cargarmelo en destroy
+    this.colors = null;
+    this.myChart.clear();
+
+    this.myChart2.clear();
+
+    this.myChart3.clear();
+
+    this.myChart.destroy();
     this.myChart = null;
+    this.myChart2.destroy();
     this.myChart2 = null;
+    this.myChart3.destroy();
     this.myChart3 = null;
+    this.myChart.destroy();
+
+    this.myChart2.destroy();
+
+    this.myChart3.destroy();
+
   }
 
   representChart() {
+    // then destory the old one so we can create a new one later
+    if (this.myChart) {
+      this.myChart.destroy();
+    }
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
     this.myChart = new Chart(this.ctx, {
@@ -85,6 +116,9 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit {
   }
 
   representChart2() {
+    if (this.myChart2) {
+      this.myChart2.destroy();
+    }
     this.canvas = document.getElementById('added');
     this.ctx = this.canvas.getContext('2d');
     this.myChart2 = new Chart(this.ctx, {
@@ -109,6 +143,9 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit {
     });
   }
   representChart3() {
+    if (this.myChart3) {
+      this.myChart3.destroy();
+    }
     this.canvas = document.getElementById('deleted');
     this.ctx = this.canvas.getContext('2d');
     this.myChart3 = new Chart(this.ctx, {
@@ -152,7 +189,6 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit {
           this.insertedLines.push(x.modifications.a);
           this.removedLines.push(x.modifications.d);
           this.labelsPre.push(x.login);
-          this.colors.push(this.getRandomColor());
         });
       }).then(() => {
         this.representChart();
