@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { notify } from './util/util';
 import * as superagent from 'superagent';
 import { DataService } from './services/DisplayEvents/display-data.service';
+import { environment } from '../environments/environment';
 
 @Component({
   selector: 'app-root',
@@ -18,8 +19,8 @@ export class AppComponent implements OnInit {
   showLateral: boolean;
   showFull: boolean;
 
-  readonly AUTH_SERVICE_URL = 'http://localhost:3000';
-  readonly SERVER_SERVICE_URL = 'http://localhost:3001';
+  readonly AUTH_SERVICE_URL = environment.authUrl;
+  readonly SERVER_SERVICE_URL = environment.serverUrl;
 
   loginUrl: string;
 
@@ -75,7 +76,7 @@ export class AppComponent implements OnInit {
     localStorage.setItem('githubToken', githubToken);
     localStorage.setItem('accessToken', accessToken);
 
-    superagent.get('http://localhost:3001/user/info')
+    superagent.get(this.SERVER_SERVICE_URL + '/user/info')
       .set('x-access-token', localStorage.getItem('accessToken'))
       .set('x-github-token', localStorage.getItem('githubToken'))
       .then((result: any) => {

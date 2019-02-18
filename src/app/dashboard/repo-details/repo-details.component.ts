@@ -3,7 +3,7 @@ import { notify } from '../../util/util';
 import * as superagent from 'superagent';
 import { DataService } from '../../services/DisplayEvents/display-data.service';
 import { Chart } from 'chart.js';
-
+import { environment } from '../../../environments/environment';
 
 import { ViewChild, ElementRef } from '@angular/core';
 
@@ -63,7 +63,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // intentar el binding de angular y sino crear el canvas cada vez 
+    // intentar el binding de angular y sino crear el canvas cada vez
     // que cree el componente y cargarmelo en destroy
     this.colors = null;
     this.myChart.clear();
@@ -178,7 +178,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   getContributors(reponame: string) {
     superagent
-      .get('http://localhost:3001/contributors')
+      .get(environment.serverUrl + '/contributors')
       .set('x-access-token', localStorage.getItem('accessToken'))
       .set('x-github-token', localStorage.getItem('githubToken'))
       .set('reponame', reponame)

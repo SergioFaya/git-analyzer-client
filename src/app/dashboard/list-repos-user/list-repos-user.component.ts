@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { notify } from '../../util/util';
 import * as superagent from 'superagent';
 import { DataService } from '../../services/DisplayEvents/display-data.service';
+import { environment } from '../.,/../../../environments/environment';
 @Component({
   selector: 'app-list-repos-user',
   templateUrl: './list-repos-user.component.html',
@@ -22,19 +23,21 @@ export class ListReposUserComponent implements OnInit {
   private getUserRepos() {
     this.alertText = 'List of repositories:';
     superagent
-      .get('http://localhost:3001/repos')
+      .get(environment.serverUrl + '/repos')
       .set('x-access-token', localStorage.getItem('accessToken'))
       .set('x-github-token', localStorage.getItem('githubToken'))
       .then((result) => {
         this.repos = result.body.repos;
       }).catch((err) => {
         console.log(err);
+        notify('Crea nuevos tokens');
+        this.dataService.loggedUser(false);
       });
   }
 
   getUserRepoByName(reponame: string) {
     superagent
-      .get('http://localhost:3001/repos/reponame')
+      .get(environment.serverUrl + '/repos/reponame')
       .set('x-access-token', localStorage.getItem('accessToken'))
       .set('x-github-token', localStorage.getItem('githubToken'))
       // find by full_name que cuando es de otro y lo tienes forqueao o eres colaborador no tira
