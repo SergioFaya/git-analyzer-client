@@ -23,8 +23,8 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   private chartAddedLines: Chart;
   private chartRemovedLines: Chart;
 
-  private repo: any;
-  private contributors: any;
+  public repo: any;
+  public contributors: any;
   private labelsPre = [];
   private dataPre = [];
   private colors = [];
