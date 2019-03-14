@@ -1,10 +1,16 @@
-<div *ngFor="let repo of repos;">
-  <div class="uk-card uk-card-default m-3">
-    <h3 class="">{{repo.full_name}}</h3>
-    <p uk-margin>
-      <button (click)='getUserRepoByName(repo.full_name)' class="uk-button uk-button-secondary">See detailed</button>
-      <a class="uk-button uk-button-primary" [href]="repo.html_url">See on github</a>
-    </p>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css" integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+<div class="uk-margin-small-top">
+  <h2>List of repos</h2>
+  <div class="uk-align-center" *ngIf="loading">
+      <i class="fas fa-spinner fa-pulse"></i>
+  </div>
+  <div  *ngFor="let repo of repos;">
+    <div class="uk-card uk-card-default m-3" style="background-color: lightgray">
+      <h3 class="">{{repo.full_name}}</h3>
+      <p uk-margin>
+        <button (click)='getUserRepoByName(repo.full_name)' class="uk-button uk-button-secondary">See detailed</button>
+        <a class="uk-button uk-button-primary" [href]="repo.html_url">See on github</a>
+      </p>
+    </div>
   </div>
 </div>
-

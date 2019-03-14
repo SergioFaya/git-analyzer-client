@@ -14,9 +14,11 @@ export class ListReposUserComponent implements OnInit {
   public repos: Array<any>;
   repoDetailed: any;
 
+  loading = false;
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
+    this.loading = true;
     this.getUserRepos();
   }
 
@@ -28,6 +30,8 @@ export class ListReposUserComponent implements OnInit {
       .set('x-github-token', localStorage.getItem('githubToken'))
       .then((result) => {
         this.repos = result.body.repos;
+      }).then(() => {
+        this.loading = false;
       }).catch((err) => {
         console.log(err);
         notify('Crea nuevos tokens');

@@ -1,4 +1,4 @@
-<div *ngIf="showTokenForm" class="">
+<div *ngIf="showTokenForm" class="uk-column-1-2" style="background-color: lightcoral">
   <p>El login no está terminado, para loggearse:</p>
   <ul>
     <li>Click en el nav en el boton de login</li>
@@ -9,9 +9,15 @@
     <li>Refrescar la página (para que se actualizen los token)</li>
   </ul>
   <label for="accessToken"> Token:</label>
+  <span style="display:inline-block; width: 15px;"></span>
   <input type="text" id="accessToken" [(ngModel)]="accessToken">
+  <br>
   <label for="githubToken"> Access Token:</label>
+  <span style="display:inline-block; width: 15px;"></span>
   <input type="text" id="githubToken" [(ngModel)]="githubToken">
+  <br>
+  <span style="display:inline-block; width: 15px;"></span>
+  
   <button class="uk-button uk-button-primary" (click)="storeToken()"> Establecer Tokens</button>
 </div>
 <div class="uk-container">

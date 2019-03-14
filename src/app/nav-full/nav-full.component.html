@@ -3,8 +3,7 @@
         <div class="uk-navbar-left">
             <ul class="uk-navbar-nav">
                 <li>
-                    <button class="uk-button uk-button-secondary" (click)="displayRepoList()">List
-                        Repositories</button>
+                    <button class="uk-button uk-button-secondary" (click)="displayRepoList()">List Repositories</button>
                 </li>
                 <!--
                 <li class="uk-active"><a href="#">Item</a></li>
@@ -14,9 +13,12 @@
         <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
                 <li>
-                    <img *ngIf="logged" class="uk-icon-button uk-margin-small-right uk-margin-small-top uk-margin-small-bottom" src="{{imageUrl}}" alt="profile-image"/>
+                    <img *ngIf="logged"
+                        class="uk-icon-button uk-margin-small-right uk-margin-small-top uk-margin-small-bottom"
+                        src="{{imageUrl}}" alt="profile-image" />
 
-                    <a *ngIf="!logged" target="blank" rel="noopener noreferrer" href="{{loginUrl}}" uk-icon="icon: user">
+                    <a *ngIf="!logged" target="blank" rel="noopener noreferrer" href="{{loginUrl}}"
+                        uk-icon="icon: user">
                         Log in</a>
                     <!--<a (click)="login()" href = "" uk-icon="icon: user"></a>-->
                     <!-- log out y configuracion
