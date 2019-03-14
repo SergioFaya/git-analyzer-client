@@ -13,21 +13,24 @@ import { ViewChild, ElementRef } from '@angular/core';
   styleUrls: ['./repo-details.component.scss']
 })
 export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
-  repo: any;
-  contributors: any;
-  labelsPre = [];
-  dataPre = [];
-  colors = [];
 
-  insertedLines = [];
-  removedLines = [];
+  // como el document.getelementbyid de angular
+  @ViewChild('commits') canvasCommits: ElementRef;
+  @ViewChild('added') canvasAdded: ElementRef;
+  @ViewChild('removed') canvasRemoved: ElementRef;
 
-  canvas: any;
-  ctx: any;
-  // charts
-  myChart: any;
-  myChart2: any;
-  myChart3: any;
+  private chartCommits: Chart;
+  private chartAddedLines: Chart;
+  private chartRemovedLines: Chart;
+
+  private repo: any;
+  private contributors: any;
+  private labelsPre = [];
+  private dataPre = [];
+  private colors = [];
+
+  private insertedLines = [];
+  private removedLines = [];
 
   constructor(private dataService: DataService) {
     this.init();
@@ -55,52 +58,33 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   init() {
-    this.dataPre = [];
-    this.insertedLines = [];
-    this.labelsPre = [];
-    this.removedLines = [];
-    // Destroy elimina el binding con el html
+
   }
 
   ngOnDestroy(): void {
-    // intentar el binding de angular y sino crear el canvas cada vez
-    // que cree el componente y cargarmelo en destroy
-    this.colors = null;
-    this.myChart.clear();
-
-    this.myChart2.clear();
-
-    this.myChart3.clear();
-
-    this.myChart.destroy();
-    this.myChart = null;
-    this.myChart2.destroy();
-    this.myChart2 = null;
-    this.myChart3.destroy();
-    this.myChart3 = null;
-    this.myChart.destroy();
-
-    this.myChart2.destroy();
-
-    this.myChart3.destroy();
-
+    this.chartCommits.destroy();
+    this.chartAddedLines.destroy();
+    this.chartRemovedLines.destroy();
   }
 
-  representChart() {
-    // then destory the old one so we can create a new one later
-    if (this.myChart) {
-      this.myChart.destroy();
-    }
-    this.canvas = document.getElementById('canvas');
-    this.ctx = this.canvas.getContext('2d');
-    this.myChart = new Chart(this.ctx, {
+  /**
+   * Represents a chart with the desired data and colors on the referencied element
+   * @param canvas ElementRef to the canvas where the chart is inserted
+   * @param dataSet Set of data to be represented
+   * @param colors Color assigned to each data set
+   * @param label label displayed
+   * @param text text of the title charts
+   */
+  representChart(canvas: ElementRef, dataSet: Array<number>, colors: Array<string>, labels: Array<string>, text: string) {
+    const context: CanvasRenderingContext2D = (<HTMLCanvasElement>canvas.nativeElement).getContext('2d');
+    return new Chart(context, {
       type: 'pie',
       data: {
-        labels: this.labelsPre,
+        labels: labels,
         datasets: [{
-          label: '# of Commits',
-          data: this.dataPre,
-          backgroundColor: this.colors,
+          // label: label,
+          data: dataSet,
+          backgroundColor: colors,
           borderWidth: 1,
         }]
       },
@@ -109,66 +93,12 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
         display: true,
         title: {
           display: true,
-          text: 'Commits'
+          text: text
         }
       }
     });
   }
 
-  representChart2() {
-    if (this.myChart2) {
-      this.myChart2.destroy();
-    }
-    this.canvas = document.getElementById('added');
-    this.ctx = this.canvas.getContext('2d');
-    this.myChart2 = new Chart(this.ctx, {
-      type: 'pie',
-      data: {
-        labels: this.labelsPre,
-        datasets: [{
-          label: '# of Commits',
-          data: this.insertedLines,
-          backgroundColor: this.colors,
-          borderWidth: 1,
-        }]
-      },
-      options: {
-        responsive: false,
-        display: true,
-        title: {
-          display: true,
-          text: 'Added Lines'
-        }
-      }
-    });
-  }
-  representChart3() {
-    if (this.myChart3) {
-      this.myChart3.destroy();
-    }
-    this.canvas = document.getElementById('deleted');
-    this.ctx = this.canvas.getContext('2d');
-    this.myChart3 = new Chart(this.ctx, {
-      type: 'pie',
-      data: {
-        labels: this.labelsPre,
-        datasets: [{
-          label: '# of Commits',
-          data: this.removedLines,
-          backgroundColor: this.colors,
-          borderWidth: 1,
-        }]
-      },
-      options: {
-        responsive: false,
-        display: true,
-        title: {
-          display: true,
-          text: 'Removed lines'
-        }
-      }
-    });
-  }
   getRandomColor() {
     const r = Math.floor(Math.random() * 200);
     const g = Math.floor(Math.random() * 200);
@@ -191,9 +121,10 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
           this.labelsPre.push(x.login);
         });
       }).then(() => {
-        this.representChart();
-        this.representChart2();
-        this.representChart3();
+        this.chartCommits = this.representChart(this.canvasCommits, this.dataPre, this.colors, this.labelsPre, '# of commits');
+        this.chartAddedLines = this.representChart(this.canvasAdded, this.insertedLines, this.colors, this.labelsPre, '# of added lines');
+        this.chartRemovedLines =
+        this.representChart(this.canvasRemoved, this.removedLines, this.colors, this.labelsPre, '# of removed lines');
       })
       .catch((err) => {
         console.log(err);
