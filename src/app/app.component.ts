@@ -24,7 +24,7 @@ export class AppComponent implements OnInit {
 
   loginUrl: string;
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private _authService: AuthService) { }
 
   /**
    * Enlaza con la template el método login

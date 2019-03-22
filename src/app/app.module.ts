@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 // no se porqué pero no puedo quitar el import
 import { HttpClientModule } from '@angular/common/http';
-import { Http } from '@angular/http';
 import { NavFullComponent } from './nav-full/nav-full.component';
 import { NavLateralComponent } from './nav-lateral/nav-lateral.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
