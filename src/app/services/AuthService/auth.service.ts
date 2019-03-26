@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '';
+import { environment } from 'src/environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
@@ -51,22 +52,5 @@ export class AuthService {
       headers: new HttpHeaders(headers)
     };
     return this.http.get(this.SERVER_SERVICE_URL + this.USER_INFO, httpOptions);
-  }
-
-  storeTokens(accessToken: string, githubToken: string) {
-    localStorage.setItem('githubToken', githubToken);
-    localStorage.setItem('accessToken', accessToken);
-
-    superagent.get(this.SERVER_SERVICE_URL + this.USER_INFO)
-      .set('x-access-token', localStorage.getItem('accessToken'))
-      .set('x-github-token', localStorage.getItem('githubToken'))
-      .then((result: any) => {
-        this.dataService.loggedUser(true);
-        this.dataService.imageUrlContent(result.body.user.avatarUrl);
-        localStorage.setItem('email', result.body.user.email);
-        localStorage.setItem('login', result.body.user.login);
-        localStorage.setItem('userId', result.body.user.userId);
-        notify(`Hola ${result.body.user.login}-${result.body.user.email}`);
-      });
   }
 }
