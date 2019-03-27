@@ -39,7 +39,7 @@ export class AuthService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' })
     };
-    return this.http.get(this.AUTH_SERVICE_URL + this.LOGIN_ADDRESS, httpOptions);
+    return this.http.get(this.AUTH_SERVICE_URL + this.LOGIN_ADDRESS, httpOptions).toPromise();
   }
 
   getUserInfo() {

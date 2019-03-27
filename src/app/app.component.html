@@ -2,5 +2,5 @@
 <div (window:resize)="onResize($event)"></div>
 <div ng-init="ngOnInit($event)"></div>
 <app-nav-lateral *ngIf="showLateral"></app-nav-lateral>
-<app-nav-full [loginUrl]="loginUrl" [login]="loginFunc" *ngIf="showFull"></app-nav-full>
+<app-nav-full [loginUrl]="loginUrl" *ngIf="showFull"></app-nav-full>
 <app-dashboard [storeTokensFunc]="storeTokensFunc"></app-dashboard>
