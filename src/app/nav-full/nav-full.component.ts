@@ -10,7 +10,7 @@ import { DataService } from '../services/DisplayEvents/display-data.service';
 })
 export class NavFullComponent implements OnInit {
   // reference to parent class function
-  @Input() login: Function;
+  @Input() logout: Function;
   @Input() loginUrl: string;
   imageUrl: string;
   logged: boolean;
@@ -25,10 +25,6 @@ export class NavFullComponent implements OnInit {
     this.dataService.image.subscribe((url) => {
       this.imageUrl = url;
     });
-
-    // cambios en caso de refresh
-    this.imageUrl = localStorage.getItem('imageUrl');
-    this.logged = localStorage.getItem('logged') === 'logged' ? true : false;
   }
 
   // dashboard content
@@ -40,8 +36,5 @@ export class NavFullComponent implements OnInit {
   displayRepoList() {
     this.changeDashboardContent(this.dataService.repoList);
   }
-
-
-  // dashboard content
 
 }

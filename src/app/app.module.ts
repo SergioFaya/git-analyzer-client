@@ -10,6 +10,7 @@ import { NavLateralComponent } from './nav-lateral/nav-lateral.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { ListReposUserComponent } from './dashboard/list-repos-user/list-repos-user.component';
 import { RepoDetailsComponent } from './dashboard/repo-details/repo-details.component';
+import { BreadcrumsComponent } from './dashboard/breadcrums/breadcrums.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { RepoDetailsComponent } from './dashboard/repo-details/repo-details.comp
     NavLateralComponent,
     DashboardComponent,
     ListReposUserComponent,
-    RepoDetailsComponent
+    RepoDetailsComponent,
+    BreadcrumsComponent
   ],
   imports: [
     BrowserModule,

@@ -11,25 +11,12 @@ import { DataService } from '../services/DisplayEvents/display-data.service';
 })
 
 export class DashboardComponent implements OnInit {
-
-  // login cutre
-  @Input() storeTokensFunc: Function;
-  //
-  public alertText: string;
+  
   public showTokenForm: boolean;
   public showRepos: boolean;
   public showDetailedRepo: boolean;
 
-  accessToken: string;
-  githubToken: string;
-
-  constructor(private dataService: DataService) {
-    this.showTokenForm = true;
-  }
-
-  storeToken() {
-    this.storeTokensFunc(this.accessToken, this.githubToken);
-  }
+  constructor(private dataService: DataService) { }
 
   ngOnInit() {
     this.dataService.content.subscribe((content) => {

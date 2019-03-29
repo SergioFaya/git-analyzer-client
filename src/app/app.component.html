@@ -1,6 +1,10 @@
+<!--dependencies-->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
+    integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous">
+
 <!-- template scheme -->
 <div (window:resize)="onResize($event)"></div>
 <div ng-init="ngOnInit($event)"></div>
 <app-nav-lateral *ngIf="showLateral"></app-nav-lateral>
-<app-nav-full [loginUrl]="loginUrl" *ngIf="showFull"></app-nav-full>
-<app-dashboard [storeTokensFunc]="storeTokensFunc"></app-dashboard>
+<app-nav-full [logout]="logoutFunc" [loginUrl]="loginUrl" *ngIf="showFull"></app-nav-full>
+<app-dashboard></app-dashboard>
