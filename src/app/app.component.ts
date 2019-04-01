@@ -43,7 +43,7 @@ export class AppComponent implements OnInit {
 
 	/**
 	 * Prepares the socket for receiving info based on the state event
-	 * @param state 
+	 * @param state
 	 */
 	public initSocket(state: string): void {
 		this.socket = socketIo('http://localhost:3000');
@@ -55,6 +55,11 @@ export class AppComponent implements OnInit {
 	private login(token, githubToken) {
 		this.storeTokens(token, githubToken)
 		this.dataService.loggedUser(true);
+		this.authService.getUserInfo()
+		.then(
+			x => console.log(x)
+		)
+		.catch(err => console.log(err));
 	}
 
 	get logoutFunc() {
