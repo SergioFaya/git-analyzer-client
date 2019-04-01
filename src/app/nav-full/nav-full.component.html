@@ -13,13 +13,12 @@
         <div class="uk-navbar-right">
             <ul class="uk-navbar-nav">
                 <li>
+                    <!-- LOGGED -->
                     <img *ngIf="logged" src="{{imageUrl}}" alt="profile-image"
                         class="uk-icon-button uk-margin-small-right uk-margin-small-top uk-margin-small" />
                     <div *ngIf="logged" class="uk-navbar-dropdown">
                         <ul class="uk-nav uk-navbar-dropdown-nav">
-                            <li class="uk-nav-header">
-                                User
-                            </li>
+                            <li class="uk-nav-header">User</li>
                             <!--FIXME:  añadir el client_id para que llegue a la app directamente-->
                             <li>
                                 <a href="https://github.com/settings/connections/applications/{{client_id}}">
@@ -29,11 +28,12 @@
                             <li class="uk-nav-divider"></li>
                             <li (click)="logout()">
                                 <a>
-                                    <span class="uk-margin-small-right" uk-icon="icon: close" ></span>Log Out
+                                    <span class="uk-margin-small-right" uk-icon="icon: close"></span>Log Out
                                 </a>
                             </li>
                         </ul>
                     </div>
+                    <!-- NOT LOGGED -->
                     <!-- TODO: REVISAR EL UK-ICON POR EL SIZE DEL NAV-->
                     <a *ngIf="!logged" target="blank" rel="noopener noreferrer" href="{{loginUrl}}"
                         uk-icon="icon: user">Log in</a>

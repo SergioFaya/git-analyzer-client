@@ -17,8 +17,12 @@ export class AppComponent implements OnInit {
 	size: number;
 	showLateral: boolean;
 	showFull: boolean;
+	
 	logged: boolean;
+	imageUrl: string;
 
+
+	// TODO: sacar url y paths a config
 	readonly AUTH_SERVICE_URL = environment.authUrl;
 	readonly SERVER_SERVICE_URL = environment.serverUrl;
 
@@ -29,16 +33,15 @@ export class AppComponent implements OnInit {
 	ngOnInit(): void {
 		this.size = window.innerWidth;
 		this.adaptToSize(this.size);
+		this.getLoginUrl();
+		this.logged = localStorage.getItem('logged') == 'logged';
 		this.dataService.logged.subscribe((logged) => {
-			this.logged = logged;
-		  });
-		this.authService.getLoginUrl()
-			.then((response: any) => {
-				this.loginUrl = response.data;
-				var state = this.loginUrl.split('state=')[1];
-				this.initSocket(state);
-				this.send(state, 'message')
-			}).catch(err => new Error(err));
+			this.logged = localStorage.getItem('logged') == 'logged';
+		});
+	}
+
+	get logoutFunc() {
+		return this.logOut.bind(this);
 	}
 
 	/**
@@ -52,18 +55,26 @@ export class AppComponent implements OnInit {
 		});
 	}
 
+	private getLoginUrl() {
+		this.authService.getLoginUrl()
+			.then((response: any) => {
+				this.loginUrl = response.data;
+				var state = this.loginUrl.split('state=')[1];
+				this.initSocket(state);
+				this.send(state, 'message');
+			}).catch(err => new Error(err));
+	}
 	private login(token, githubToken) {
 		this.storeTokens(token, githubToken)
+		localStorage.setItem('logged', 'logged');
 		this.dataService.loggedUser(true);
 		this.authService.getUserInfo()
-		.then(
-			x => console.log(x)
-		)
-		.catch(err => console.log(err));
-	}
-
-	get logoutFunc() {
-		return this.logOut.bind(this);
+			.then((result: any) => {
+				var { avatarUrl } = result.user;
+				localStorage.setItem('avatarUrl', avatarUrl);
+				this.dataService.imageUrlContent(avatarUrl);
+			})
+			.catch(err => console.log(err));
 	}
 
 	public logOut() {
@@ -71,7 +82,12 @@ export class AppComponent implements OnInit {
 			.then(() => {
 				notify('Taluego');
 				this.dataService.loggedUser(false);
+				localStorage.setItem('logged', null);
+				localStorage.setItem('avatarUrl', null);
 				this.storeTokens(null, null);
+			}).then(() => {
+				// recargamos la página para eliminar la info del usuario
+				window.location.reload();
 			}).catch(err =>
 				notify('No se puede hacer logout ' + err.error.message)
 			);
@@ -102,7 +118,6 @@ export class AppComponent implements OnInit {
 		this.socket.emit(event, { socket: this.socket, message: message });
 	}
 
-
 	onResize(event): void {
 		this.size = event.target.innerWidth;
 		this.adaptToSize(this.size);
@@ -117,5 +132,5 @@ export class AppComponent implements OnInit {
 			this.showFull = true;
 		}
 	}
-
 }
+

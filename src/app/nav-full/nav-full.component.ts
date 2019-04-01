@@ -9,6 +9,7 @@ import { DataService } from '../services/DisplayEvents/display-data.service';
   styleUrls: ['./nav-full.component.scss']
 })
 export class NavFullComponent implements OnInit {
+  
   // reference to parent class function
   @Input() logout: Function;
   @Input() loginUrl: string;
@@ -18,18 +19,17 @@ export class NavFullComponent implements OnInit {
   constructor(private dataService: DataService) { }
 
   ngOnInit() {
-    // subscripcion a nuevos cambios
-    // TODO: pasar la subscripcion a todos los hijos
-    this.dataService.logged.subscribe((logged) => {
-      this.logged = logged;
-    });
-    this.dataService.image.subscribe((url) => {
-      this.imageUrl = url;
-    });
+    this.logged = localStorage.getItem('logged') == 'logged';
+		this.dataService.logged.subscribe((logged) => {
+			this.logged = localStorage.getItem('logged') == 'logged';
+		});
+		this.imageUrl = localStorage.getItem('avatarUrl');
+		this.dataService.image.subscribe((url) => {
+			this.imageUrl = localStorage.getItem('avatarUrl');
+		});
   }
 
   // dashboard content
-
   changeDashboardContent(dashboardContent: string) {
     this.dataService.showDashboard(dashboardContent);
   }

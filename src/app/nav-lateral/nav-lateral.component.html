@@ -1,28 +1,30 @@
 <div id="nav-lower-960">
-  <nav class="uk-navbar uk-navbar-container uk-margin">
-      <div class="uk-navbar-left">
-          <a class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle="target: #offcanvas-nav" href="#"></a>
-      </div>
-  </nav>
-  <div id="offcanvas-nav" uk-offcanvas="overlay: true">
-      <div class="uk-offcanvas-bar">
-
-          <ul class="uk-nav uk-nav-default">
-              <li class="uk-active"><a href="#">Active</a></li>
-              <li class="uk-parent">
-                  <a href="#">Parent</a>
-                  <ul class="uk-nav-sub">
-                      <li><a href="#">Sub item</a></li>
-                      <li><a href="#">Sub item</a></li>
-                  </ul>
-              </li>
-              <li class="uk-nav-header">Header</li>
-              <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: table"></span> Item</a></li>
-              <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: cog"></span> Item</a></li>
-              <li class="uk-nav-divider"></li>
-              <li><a href="#"><span class="uk-margin-small-right" uk-icon="icon: user"></span> Item</a></li>
-          </ul>
-
-      </div>
-  </div>
+    <nav class="uk-navbar uk-navbar-container uk-margin">
+        <div class="uk-navbar-left">
+            <a class="uk-navbar-toggle" uk-navbar-toggle-icon uk-toggle="target: #offcanvas-nav" href="#"></a>
+        </div>
+    </nav>
+    <div id="offcanvas-nav" uk-offcanvas="overlay: true">
+        <div class="uk-offcanvas-bar">
+            <img *ngIf="logged" src="{{imageUrl}}" alt="profile-image"
+                class="uk-icon-button uk-margin-small-top uk-margin-small" style="height: 85px; width: 85px;" />
+            <ul class="uk-nav uk-nav-default">
+                <li class="uk-nav-header">Dashboard</li>
+                <li class="uk-parent">
+                    <!--<a href="#">Parent</a>-->
+                    <ul class="uk-nav-sub">
+                        <li><a (click)="displayRepoList()">List Repos</a></li>
+                    </ul>
+                </li>
+                <li class="uk-nav-divider"></li>
+                <li class="uk-nav-header">User Info</li>
+                <li><a *ngIf="!logged" href="{{loginUrl}}" target="blank" rel="noopener noreferrer"><span class="uk-margin-small-right" uk-icon="icon: user"></span>Log in</a>
+                </li>
+                <li><a href="https://github.com/settings/connections/applications/{{client_id}}"><span class="uk-margin-small-right" uk-icon="icon: cog"></span>Config</a></li>
+                <li (click)="logout()"><a *ngIf="logged"><span class="uk-margin-small-right" uk-icon="icon: user"></span>Log Out</a></li>
+                <!-- <li><a *ngIf="logged"><span class="uk-margin-small-right" uk-icon="icon: table"></span>Item</a></li> -->
+                
+            </ul>
+        </div>
+    </div>
 </div>

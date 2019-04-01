@@ -15,26 +15,7 @@ export class AuthService {
 	readonly LOGIN_ADDRESS: string = '/login';
 	readonly USER_INFO: string = '/user/info';
 
-	private githubToken;
-	private serverToken;
-
 	constructor(private http: HttpClient) { }
-
-	setGithubToken(githubToken: string) {
-		this.githubToken = githubToken;
-	}
-
-	setServerToken(serverToken: string) {
-		this.serverToken = serverToken;
-	}
-
-	getGithubToken(): string {
-		return this.githubToken;
-	}
-
-	getServerToken(): string {
-		return this.serverToken;
-	}
 
 	logOut() {
 		const httpOptions = {
@@ -43,9 +24,9 @@ export class AuthService {
 			})
 		}
 		const body = { 'x-access-token': localStorage.getItem('accessToken') };
-
 		return this.http.post(this.AUTH_SERVICE_URL + this.LOGOUT_ADDRESS, body, httpOptions).toPromise();
 	}
+
 	getLoginUrl() {
 		const httpOptions = {
 			headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -58,14 +39,13 @@ export class AuthService {
 	getUserInfo() {
 		const headers = {
 			'Content-Type': 'application/json',
-			'x-access-token': this.serverToken,
-			'x-github-token': this.githubToken
+			'x-access-token': localStorage.getItem('accessToken'),
+			'x-github-token': localStorage.getItem('githubToken')
 		};
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
 		};
 		return this.http.get(this.SERVER_SERVICE_URL + this.USER_INFO, httpOptions).toPromise();
 	}
-
 
 }

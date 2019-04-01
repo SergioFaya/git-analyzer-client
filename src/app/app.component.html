@@ -5,7 +5,7 @@
 <!-- template scheme -->
 <div (window:resize)="onResize($event)"></div>
 <div ng-init="ngOnInit($event)"></div>
-<app-nav-lateral *ngIf="showLateral"></app-nav-lateral>
+<app-nav-lateral [logout]="logoutFunc" [loginUrl]="loginUrl" *ngIf="showLateral"></app-nav-lateral>
 <app-nav-full [logout]="logoutFunc" [loginUrl]="loginUrl" *ngIf="showFull"></app-nav-full>
 <app-dashboard *ngIf="logged"></app-dashboard>
 
