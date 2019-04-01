@@ -19,6 +19,7 @@ export class NavFullComponent implements OnInit {
 
   ngOnInit() {
     // subscripcion a nuevos cambios
+    // TODO: pasar la subscripcion a todos los hijos
     this.dataService.logged.subscribe((logged) => {
       this.logged = logged;
     });

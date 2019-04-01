@@ -1,9 +1,17 @@
 <div class="uk-margin-small-top">
   <h2>List of repos</h2>
-  <div class="uk-align-center" *ngIf="loading">
-      <i class="fas fa-spinner fa-pulse"></i>
+  <div *ngIf="loading" class="uk-align-center">
+    <i class="fas fa-spinner fa-pulse"></i>
   </div>
-  <div  *ngFor="let repo of repos;">
+  
+  <div class="uk-margin">
+    <form class="uk-search uk-search-default">
+      <span uk-search-icon></span>
+      <input class="uk-search-input" type="search" placeholder="Search...">
+    </form>
+  </div>
+
+  <div *ngFor="let repo of repos;">
     <div class="uk-card uk-card-default m-3" style="background-color: lightgray">
       <h3 class="">{{repo.full_name}}</h3>
       <p uk-margin>

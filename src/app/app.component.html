@@ -7,4 +7,9 @@
 <div ng-init="ngOnInit($event)"></div>
 <app-nav-lateral *ngIf="showLateral"></app-nav-lateral>
 <app-nav-full [logout]="logoutFunc" [loginUrl]="loginUrl" *ngIf="showFull"></app-nav-full>
-<app-dashboard></app-dashboard>
+<app-dashboard *ngIf="logged"></app-dashboard>
+
+<div *ngIf="!logged">
+    <h1>Please Log in</h1>
+</div>
+

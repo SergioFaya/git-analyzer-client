@@ -17,6 +17,7 @@ export class AppComponent implements OnInit {
 	size: number;
 	showLateral: boolean;
 	showFull: boolean;
+	logged: boolean;
 
 	readonly AUTH_SERVICE_URL = environment.authUrl;
 	readonly SERVER_SERVICE_URL = environment.serverUrl;
@@ -28,6 +29,9 @@ export class AppComponent implements OnInit {
 	ngOnInit(): void {
 		this.size = window.innerWidth;
 		this.adaptToSize(this.size);
+		this.dataService.logged.subscribe((logged) => {
+			this.logged = logged;
+		  });
 		this.authService.getLoginUrl()
 			.then((response: any) => {
 				this.loginUrl = response.data;
@@ -75,6 +79,7 @@ export class AppComponent implements OnInit {
 	}
 
 	private obtainBasicInfo() {
+		// TODO: sacar a un service
 		superagent.get(this.SERVER_SERVICE_URL + '/user/info')
 			.set('x-access-token', localStorage.getItem('accessToken'))
 			.set('x-github-token', localStorage.getItem('githubToken'))
