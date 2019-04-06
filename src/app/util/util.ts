@@ -1,3 +1,4 @@
+// @ts-ignore
 import * as UIkit from 'uikit';
 
 export function notify(data: string, timeout: number = 3000): void {

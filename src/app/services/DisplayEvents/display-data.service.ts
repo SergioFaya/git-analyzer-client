@@ -10,7 +10,7 @@ export class DataService {
   content = this.currentDashboardContent.asObservable();
 
   // revisar - ta puesto rapido hecho una mierda
-  private repoDetailedContent = new BehaviorSubject(null);
+  private repoDetailedContent = new BehaviorSubject('');
   repo = this.repoDetailedContent.asObservable();
 
   private isloggedUser = new BehaviorSubject(false);

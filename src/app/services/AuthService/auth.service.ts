@@ -1,5 +1,5 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 
 
@@ -36,11 +36,13 @@ export class AuthService {
 	}
 
 	// TODO: llamarla para pillar la foto y la info básica
-	getUserInfo() {
+	getUserInfo(): Promise<any> {
+		const accessToken = localStorage.getItem('accessToken') as string;
+		const githubToken = localStorage.getItem('githubToken') as string;
 		const headers = {
 			'Content-Type': 'application/json',
-			'x-access-token': localStorage.getItem('accessToken'),
-			'x-github-token': localStorage.getItem('githubToken')
+			'x-access-token': accessToken,
+			'x-github-token': githubToken
 		};
 		const httpOptions = {
 			headers: new HttpHeaders(headers)

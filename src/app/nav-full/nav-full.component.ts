@@ -1,6 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
-import * as superagent from 'superagent';
-import { notify } from '../util/util';
+import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from '../services/DisplayEvents/display-data.service';
 
 @Component({
@@ -11,10 +9,10 @@ import { DataService } from '../services/DisplayEvents/display-data.service';
 export class NavFullComponent implements OnInit {
   
   // reference to parent class function
-  @Input() logout: Function;
-  @Input() loginUrl: string;
-  imageUrl: string;
-  logged: boolean;
+  @Input() logout!: Function;
+  @Input() loginUrl!: string;
+  imageUrl!: string;
+  logged!: boolean;
 
   constructor(private dataService: DataService) { }
 
@@ -23,9 +21,9 @@ export class NavFullComponent implements OnInit {
 		this.dataService.logged.subscribe((logged) => {
 			this.logged = localStorage.getItem('logged') == 'logged';
 		});
-		this.imageUrl = localStorage.getItem('avatarUrl');
+		this.imageUrl = localStorage.getItem('avatarUrl') as string;
 		this.dataService.image.subscribe((url) => {
-			this.imageUrl = localStorage.getItem('avatarUrl');
+			this.imageUrl = localStorage.getItem('avatarUrl') as string;
 		});
   }
 

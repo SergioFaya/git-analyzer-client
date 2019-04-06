@@ -1,11 +1,10 @@
-import { Component, AfterViewInit, OnInit, Input } from '@angular/core';
-import { notify } from './util/util';
-import * as superagent from 'superagent';
-import { DataService } from './services/DisplayEvents/display-data.service';
+import { Component, OnInit } from '@angular/core';
+import * as socketIo from 'socket.io-client';
 import { environment } from '../environments/environment';
 import { AuthService } from './services/AuthService/auth.service';
+import { DataService } from './services/DisplayEvents/display-data.service';
+import { notify } from './util/util';
 
-import * as socketIo from 'socket.io-client';
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
@@ -13,26 +12,35 @@ import * as socketIo from 'socket.io-client';
 })
 
 export class AppComponent implements OnInit {
-	private socket;
-	size: number;
-	showLateral: boolean;
-	showFull: boolean;
-	
-	logged: boolean;
-	imageUrl: string;
+	// @ts-ignore
+	socket: SocketIOClient.Socket;
+	showLateral: boolean | undefined;
+	showFull: boolean | undefined;
+
+	logged: boolean | undefined;
+	imageUrl: string | undefined;
 
 
 	// TODO: sacar url y paths a config
 	readonly AUTH_SERVICE_URL = environment.authUrl;
 	readonly SERVER_SERVICE_URL = environment.serverUrl;
 
-	loginUrl: string;
+
+	private _loginUrl!: string;
+	public get loginUrl(): string {
+		return this._loginUrl;
+	}
+	public set loginUrl(v: string) {
+		this._loginUrl = v;
+	}
+
 
 	constructor(private dataService: DataService, private authService: AuthService) { }
 
 	ngOnInit(): void {
-		this.size = window.innerWidth;
-		this.adaptToSize(this.size);
+		const size = window.innerWidth;
+		this.adaptToSize(size);
+		
 		this.getLoginUrl();
 		this.logged = localStorage.getItem('logged') == 'logged';
 		this.dataService.logged.subscribe((logged) => {
@@ -50,7 +58,7 @@ export class AppComponent implements OnInit {
 	 */
 	public initSocket(state: string): void {
 		this.socket = socketIo('http://localhost:3000');
-		this.socket.on(state, (message) => {
+		this.socket.on(state, (message: any) => {
 			this.login(message.token, message.githubToken);
 		});
 	}
@@ -64,17 +72,16 @@ export class AppComponent implements OnInit {
 				this.send(state, 'message');
 			}).catch(err => new Error(err));
 	}
-	private login(token, githubToken) {
+	private login(token: string, githubToken: string) {
 		this.storeTokens(token, githubToken)
 		localStorage.setItem('logged', 'logged');
 		this.dataService.loggedUser(true);
 		this.authService.getUserInfo()
 			.then((result: any) => {
-				var { avatarUrl } = result.user;
-				localStorage.setItem('avatarUrl', avatarUrl);
-				this.dataService.imageUrlContent(avatarUrl);
+				localStorage.setItem('avatarUrl', result.userData.imageUrl);
+				this.dataService.imageUrlContent(result.userData.imageUrl);
 			})
-			.catch(err => console.log(err));
+			.catch((err: any) => console.log(err));
 	}
 
 	public logOut() {
@@ -82,9 +89,9 @@ export class AppComponent implements OnInit {
 			.then(() => {
 				notify('Taluego');
 				this.dataService.loggedUser(false);
-				localStorage.setItem('logged', null);
-				localStorage.setItem('avatarUrl', null);
-				this.storeTokens(null, null);
+				localStorage.setItem('logged', '');
+				localStorage.setItem('avatarUrl', '');
+				this.storeTokens('', '');
 			}).then(() => {
 				// recargamos la página para eliminar la info del usuario
 				window.location.reload();
@@ -99,28 +106,13 @@ export class AppComponent implements OnInit {
 		localStorage.setItem('accessToken', accessToken);
 	}
 
-	private obtainBasicInfo() {
-		// TODO: sacar a un service
-		superagent.get(this.SERVER_SERVICE_URL + '/user/info')
-			.set('x-access-token', localStorage.getItem('accessToken'))
-			.set('x-github-token', localStorage.getItem('githubToken'))
-			.then((result: any) => {
-				this.dataService.loggedUser(true);
-				this.dataService.imageUrlContent(result.body.user.avatarUrl);
-				localStorage.setItem('email', result.body.user.email);
-				localStorage.setItem('login', result.body.user.login);
-				localStorage.setItem('userId', result.body.user.userId);
-				notify(`Hola ${result.body.user.login}-${result.body.user.email}`);
-			});
-	}
-
 	public send(event: string, message: string): void {
 		this.socket.emit(event, { socket: this.socket, message: message });
 	}
 
-	onResize(event): void {
-		this.size = event.target.innerWidth;
-		this.adaptToSize(this.size);
+	onResize(event: any): void {
+		const size = event.target.innerWidth;
+		this.adaptToSize(size);
 	}
 
 	private adaptToSize(size: number): void {
