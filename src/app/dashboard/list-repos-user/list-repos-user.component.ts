@@ -1,59 +1,51 @@
 import { Component, OnInit } from '@angular/core';
-import * as superagent from 'superagent';
-import { environment } from '../.,/../../../environments/environment';
+import Repo from '../../models/Repo';
 import { DataService } from '../../services/DisplayEvents/display-data.service';
+import { RepoService } from '../../services/RepoService/repo.service';
 import { notify } from '../../util/util';
 @Component({
-  selector: 'app-list-repos-user',
-  templateUrl: './list-repos-user.component.html',
-  styleUrls: ['./list-repos-user.component.scss']
+	selector: 'app-list-repos-user',
+	templateUrl: './list-repos-user.component.html',
+	styleUrls: ['./list-repos-user.component.scss']
 })
 export class ListReposUserComponent implements OnInit {
 
-  public alertText!: string;
-  public repos!: Array<any>;
-  repoDetailed: any;
+	public alertText!: string;
+	public repos!: Array<Repo>;
+	repoDetailed: any;
 
-  loading = false;
-  constructor(private dataService: DataService) { }
+	loading = false;
+	constructor(private dataService: DataService, private repoService: RepoService) { }
 
-  ngOnInit() {
-    this.loading = true;
-    this.getUserRepos();
-  }
+	ngOnInit() {
+		this.loading = true;
+		this.getUserRepos();
+	}
 
-  private getUserRepos() {
-    this.alertText = 'List of repositories:';
-    superagent
-      .get(environment.serverUrl + '/repos')
-      .set('x-access-token', localStorage.getItem('accessToken') as string)
-      .set('x-github-token', localStorage.getItem('githubToken') as string)
-      .then((result) => {
-        this.repos = result.body.repos;
-      }).then(() => {
-        this.loading = false;
-      }).catch((err) => {
-        console.log(err);
-        notify('Crea nuevos tokens');
-        this.dataService.loggedUser(false);
-      });
-  }
+	private getUserRepos() {
+		this.alertText = 'List of repositories:';
+		this.repoService.getAllRepos().then(
+			(result) => {
+				this.loading = false;
+				this.repos = result.repos;
+			}).catch((err) => {
+				console.log(err);
+				notify('Error en listado: Vuelve a loggearte o prueba más tarde');
+				this.dataService.loggedUser(false);
+			});
+	}
 
-  getUserRepoByName(reponame: string) {
-    superagent
-      .get(environment.serverUrl + '/repos/reponame')
-      .set('x-access-token', localStorage.getItem('accessToken') as string)
-      .set('x-github-token', localStorage.getItem('githubToken') as string)
-      // find by full_name que cuando es de otro y lo tienes forqueao o eres colaborador no tira
-      // .set('username', localStorage.getItem('login'))
-      .set('reponame', reponame)
-      .then((result) => {
-        this.repoDetailed = result.body.repo;
-        // separar comportamiento en el otro component
-        this.dataService.detailedRepo(this.repoDetailed);
-        this.dataService.showDashboard(this.dataService.repoDetailed);
-      }).catch((err) => {
-        console.log(err);
-      });
-  }
+	getUserRepoByName(reponame: string) {
+		this.repoService.getRepoByName(reponame)
+			.then((repo) => {
+				this.repoDetailed = repo;
+				// separar comportamiento en el otro component
+				this.dataService.detailedRepo(this.repoDetailed);
+				this.dataService.showDashboard(this.dataService.repoDetailed);
+			}).catch((err) => {
+				console.log(err);
+				notify('Error en listado: Vuelve a loggearte o prueba más tarde');
+				this.dataService.loggedUser(false);
+			});
+	}
 }

@@ -1,9 +1,8 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import * as superagent from 'superagent';
-import { environment } from '../../../environments/environment';
+import PieChartContributionsVM from '../../models/PieChartContributionsVM';
+import { ChartService } from '../../services/ChartService/chart.service';
 import { DataService } from '../../services/DisplayEvents/display-data.service';
-
 
 @Component({
 	selector: 'app-repo-details',
@@ -26,20 +25,22 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	private chartRemovedLines!: Chart;
 
 	public repo: any;
-	public contributors: any;
+	public contributions!: Array<PieChartContributionsVM>;
 	private labelsPre: any = [];
 
 	private colors = Array<string>();
 	private dataPre: any = [];
 	private insertedLines: any = [];
 	private removedLines: any = [];
+	public loading: boolean = false;
 
-	constructor(private dataService: DataService) { }
+	constructor(private dataService: DataService, private chartService: ChartService) {
+		this.loading = true;
+	}
 
 	// Somewhere under the class constructor we want to wait for our view
 	// to initialize
 	ngAfterViewInit() {
-		// this.getContributors(this.repo.full_name);
 	}
 
 	// change get elemet by id por tag #canvas
@@ -52,7 +53,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 		}
 		this.dataService.repo.subscribe((repo) => {
 			this.repo = repo;
-			this.getContributors(this.repo.full_name);
+			this.getContributorsForCharts(this.repo.full_name);
 		});
 	}
 
@@ -71,7 +72,6 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	 * @param text text of the title charts
 	 */
 	representChart(canvas: ElementRef, dataSet: Array<number>, colors: Array<string>, labels: Array<string>, text: string) {
-
 		const context: CanvasRenderingContext2D = (<HTMLCanvasElement>canvas.nativeElement).getContext('2d') as CanvasRenderingContext2D;
 		return new Chart(context, {
 			type: 'pie',
@@ -101,21 +101,19 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 		return 'rgb(' + r + ', ' + g + ', ' + b + ')';
 	}
 
-	getContributors(reponame: string) {
-		superagent
-			.get(environment.serverUrl + '/contributors')
-			.set('x-access-token', localStorage.getItem('accessToken') as string)
-			.set('x-github-token', localStorage.getItem('githubToken') as string)
-			.set('reponame', reponame)
+	getContributorsForCharts(reponame: string) {
+		this.chartService.getContributorsForPieChart(reponame)
 			.then((result) => {
-				this.contributors = result.body.contributors;
-				this.contributors.map((x: any) => {
-					this.dataPre.push(x.modifications.c);
-					this.insertedLines.push(x.modifications.a);
-					this.removedLines.push(x.modifications.d);
-					this.labelsPre.push(x.login);
+				this.loading = false;
+				this.contributions = result.contributionsVM as Array<PieChartContributionsVM>;
+				this.contributions.map((contrib: PieChartContributionsVM) => {
+					this.dataPre.push(contrib.modifications.c);
+					this.insertedLines.push(contrib.modifications.a);
+					this.removedLines.push(contrib.modifications.d);
+					this.labelsPre.push(contrib.login);
 				});
 			}).then(() => {
+				// PIE CHARTS
 				this.chartCommits = this.representChart(this.canvasCommits, this.dataPre, this.colors, this.labelsPre, '# of commits');
 				this.chartAddedLines = this.representChart(this.canvasAdded, this.insertedLines, this.colors, this.labelsPre, '# of added lines');
 				this.chartRemovedLines =
@@ -126,4 +124,3 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 	}
 }
-

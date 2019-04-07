@@ -1,41 +1,45 @@
 <div class="uk-container-large">
-  <h2>{{repo.name}}</h2>
-  <h3>Contributors:</h3>
-  <table class="uk-table">
-    <thead>
-      <tr>
-        <th></th>
-        <th>Username</th>
-        <th>Added Lines</th>
-        <th>Removed Lines</th>
-        <th>Commits</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let item of contributors">
-        <td>
-          <img src="{{item.avatar_url}}" alt="icon" class="" width="100px" height="100px" />
-        </td>
-        <td>
-          {{item.login}}
-        </td>
-        <td>
-          {{item.modifications.a}}
-        </td>
-        <td>
-          {{item.modifications.d}}
-        </td>
-        <td>
-          {{item.modifications.c}}
-        </td>
-      </tr>
-    </tbody>
-  </table>
+	<div id="alert">{{alertText}}</div>
+	<div *ngIf="loading" class="uk-align-center">
+		<i class="fas fa-spinner fa-pulse"></i>
+	</div>
+	<h2>{{repo.name}}</h2>
+	<h3>Contributors:</h3>
+	<table class="uk-table">
+		<thead>
+			<tr>
+				<th></th>
+				<th>Username</th>
+				<th>Added Lines</th>
+				<th>Removed Lines</th>
+				<th>Commits</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let item of contributions">
+				<td>
+					<img src="{{item.avatar_url}}" alt="icon" class="" width="100px" height="100px" />
+				</td>
+				<td>
+					{{item.login}}
+				</td>
+				<td>
+					{{item.modifications.a}}
+				</td>
+				<td>
+					{{item.modifications.d}}
+				</td>
+				<td>
+					{{item.modifications.c}}
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
-  <div class="uk-grid-collapse uk-child-width-expand@s uk-text-center" uk-grid>
-    <div> <canvas #commits id='commits' width="350px" height="350px"></canvas></div>
-    <div> <canvas #added id='added' width="350px" height="350px"></canvas></div>
-    <div> <canvas #removed id='removed' width="350px" height="350px"></canvas></div>
-  </div>
+	<div class="uk-grid-collapse uk-child-width-expand@s uk-text-center" uk-grid>
+		<div> <canvas #commits id='commits' width="350px" height="350px"></canvas></div>
+		<div> <canvas #added id='added' width="350px" height="350px"></canvas></div>
+		<div> <canvas #removed id='removed' width="350px" height="350px"></canvas></div>
+	</div>
 
 </div>

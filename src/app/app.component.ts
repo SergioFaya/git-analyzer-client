@@ -78,6 +78,7 @@ export class AppComponent implements OnInit {
 		this.dataService.loggedUser(true);
 		this.authService.getUserInfo()
 			.then((result: any) => {
+				// TODO: guardar todos los datos del usuario para las peticiones de la api
 				localStorage.setItem('avatarUrl', result.userData.imageUrl);
 				this.dataService.imageUrlContent(result.userData.imageUrl);
 			})
