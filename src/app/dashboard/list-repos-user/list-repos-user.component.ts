@@ -12,8 +12,8 @@ export class ListReposUserComponent implements OnInit {
 
 	public repos!: Array<Repo>;
 	repoDetailed: any;
-	readonly PER_PAGE = 5;
-	public page = 1;
+	public per_page = 5;
+	public page = 0;
 
 	loading = false;
 	constructor(private dataService: DataService, private repoService: RepoService) { }
@@ -25,7 +25,8 @@ export class ListReposUserComponent implements OnInit {
 
 	private getUserRepos(page?: number, per_page?: number) {
 		this.repos = [];
-		this.repoService.getAllReposPaged(page+'',per_page+'').then(
+		this.loading = true;
+		this.repoService.getAllReposPaged(page + '', per_page + '').then(
 			(result) => {
 				this.loading = false;
 				this.repos = result.repos;
@@ -51,7 +52,14 @@ export class ListReposUserComponent implements OnInit {
 	}
 
 	loadPage(step: number) {
-		this.page += step;
-		this.getUserRepos(this.page,this.PER_PAGE);
+		if (this.page + step >= 0) {
+			this.page += step;
+		}
+		this.getUserRepos(this.page, this.per_page);
+	}
+
+	setPerPage(per_page: number) {
+		this.per_page = per_page;
+		this.loadPage(this.page);
 	}
 }
