@@ -10,21 +10,22 @@ import { notify } from '../../util/util';
 })
 export class ListReposUserComponent implements OnInit {
 
-	public alertText!: string;
 	public repos!: Array<Repo>;
 	repoDetailed: any;
+	readonly PER_PAGE = 5;
+	public page = 1;
 
 	loading = false;
 	constructor(private dataService: DataService, private repoService: RepoService) { }
 
 	ngOnInit() {
 		this.loading = true;
-		this.getUserRepos();
+		this.loadPage(this.page);
 	}
 
-	private getUserRepos() {
-		this.alertText = 'List of repositories:';
-		this.repoService.getAllRepos().then(
+	private getUserRepos(page?: number, per_page?: number) {
+		this.repos = [];
+		this.repoService.getAllReposPaged(page+'',per_page+'').then(
 			(result) => {
 				this.loading = false;
 				this.repos = result.repos;
@@ -47,5 +48,10 @@ export class ListReposUserComponent implements OnInit {
 				notify('Error en listado: Vuelve a loggearte o prueba más tarde');
 				this.dataService.loggedUser(false);
 			});
+	}
+
+	loadPage(step: number) {
+		this.page += step;
+		this.getUserRepos(this.page,this.PER_PAGE);
 	}
 }

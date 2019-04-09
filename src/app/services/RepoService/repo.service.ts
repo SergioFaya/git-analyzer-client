@@ -1,4 +1,4 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 
@@ -26,6 +26,28 @@ export class RepoService {
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
 		};
+		return this.http.get(this.SERVER_SERVICE_URL + this.ALL_REPOS, httpOptions).toPromise();
+	}
+
+	public getAllReposPaged(page: string, per_page: string): Promise<any> {
+		const accessToken = localStorage.getItem('accessToken') as string;
+		const githubToken = localStorage.getItem('githubToken') as string;
+		const headers = {
+			'Content-Type': 'application/json',
+			'x-access-token': accessToken,
+			'x-github-token': githubToken
+		};
+		const params: HttpParams = new HttpParams({
+			fromObject: {
+				page,
+				per_page,
+			},
+		});
+		const httpOptions = {
+			headers: new HttpHeaders(headers),
+			params,
+		};
+		console.log(page,per_page);
 		return this.http.get(this.SERVER_SERVICE_URL + this.ALL_REPOS, httpOptions).toPromise();
 	}
 

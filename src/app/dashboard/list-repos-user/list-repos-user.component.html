@@ -1,6 +1,5 @@
 <div class="uk-margin-small-top">
 	<h2>List of repos</h2>
-	<div id="alert">{{alertText}}</div>
 	<div *ngIf="loading" class="uk-align-center">
 		<i class="fas fa-spinner fa-pulse"></i>
 	</div>
@@ -21,4 +20,11 @@
 			</p>
 		</div>
 	</div>
+
+	<ul class="uk-pagination">
+		<li><a><span (click)="loadPage(-1)" class="uk-margin-small-right" uk-pagination-previous></span>
+				Previous</a></li>
+		<li class="uk-margin-auto-left"><a (click)="loadPage(1)">Next <span class="uk-margin-small-left"
+					uk-pagination-next></span></a></li>
+	</ul>
 </div>
