@@ -11,6 +11,7 @@ export class RepoService {
 	readonly SERVER_SERVICE_URL = environment.serverUrl;
 
 	readonly ALL_REPOS: string = '/repos';
+	readonly SEARCH: string = '/repos/search';
 	readonly REPO_BY_NAME: string = '/repos/reponame';
 
 	constructor(private http: HttpClient) { }
@@ -47,8 +48,32 @@ export class RepoService {
 			headers: new HttpHeaders(headers),
 			params,
 		};
-		console.log(page,per_page);
 		return this.http.get(this.SERVER_SERVICE_URL + this.ALL_REPOS, httpOptions).toPromise();
+	}
+
+	public getAllReposPagedBySearch(page: string, per_page: string, search: string): Promise<any> {
+		const accessToken = localStorage.getItem('accessToken') as string;
+		const githubToken = localStorage.getItem('githubToken') as string;
+		const username = localStorage.getItem('username') as string;
+		const headers = {
+			'Content-Type': 'application/json',
+			'x-access-token': accessToken,
+			'x-github-token': githubToken
+		};
+		const params: HttpParams = new HttpParams({
+			fromObject: {
+				page,
+				per_page,
+				username,
+				search
+			},
+		});
+		const httpOptions = {
+			headers: new HttpHeaders(headers),
+			params,
+		};
+		return this.http.get(this.SERVER_SERVICE_URL + this.SEARCH, httpOptions).toPromise();
+
 	}
 
 	public getRepoByName(reponame: string): Promise<any> {

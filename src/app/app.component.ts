@@ -40,7 +40,7 @@ export class AppComponent implements OnInit {
 	ngOnInit(): void {
 		const size = window.innerWidth;
 		this.adaptToSize(size);
-		
+
 		this.getLoginUrl();
 		this.logged = localStorage.getItem('logged') == 'logged';
 		this.dataService.logged.subscribe((logged) => {
@@ -80,6 +80,7 @@ export class AppComponent implements OnInit {
 			.then((result: any) => {
 				// TODO: guardar todos los datos del usuario para las peticiones de la api
 				localStorage.setItem('avatarUrl', result.userData.imageUrl);
+				localStorage.setItem('username', result.userData.login);
 				this.dataService.imageUrlContent(result.userData.imageUrl);
 			})
 			.catch((err: any) => console.log(err));

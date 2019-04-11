@@ -3,7 +3,8 @@
 			<div class=" uk-align-right uk-text-small">
 				<form class="uk-search uk-search-default uk-text-bold">
 					<span uk-search-icon></span>
-					<input class="uk-search-input" type="search" placeholder="Search...">
+					<input (keydown)="searchKeyDown($event)" (keyup)="searchKeyUp($event)" [(ngModel)]="searchText"
+						class="uk-search-input" type="search" placeholder="Search..." name="searchText">
 				</form>
 
 				<!--
@@ -35,9 +36,9 @@
 	</div>
 
 	<ul class="uk-pagination">
-		<li><a (click)="loadPage(-1)"><span class="uk-margin-small-right" uk-pagination-previous></span>
+		<li><a (click)="pageDown()"><span class="uk-margin-small-right" uk-pagination-previous></span>
 				Previous</a></li>
-		<li class="uk-margin-auto-left"><a (click)="loadPage(1)">Next <span class="uk-margin-small-left"
+		<li class="uk-margin-auto-left"><a (click)="pageUp()">Next <span class="uk-margin-small-left"
 					uk-pagination-next></span></a></li>
 	</ul>
 </div>

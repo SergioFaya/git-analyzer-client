@@ -13,28 +13,44 @@ export class ListReposUserComponent implements OnInit {
 	public repos!: Array<Repo>;
 	repoDetailed: any;
 	public per_page = 5;
-	public page = 0;
-
+	public page = 1;
 	loading = false;
+	public searchText!: string;
+
+	// search keyup keydown control 
+	private typingTimer: any;
+	private doneTypingInterval = 2000;
+
 	constructor(private dataService: DataService, private repoService: RepoService) { }
 
 	ngOnInit() {
 		this.loading = true;
-		this.loadPage(this.page);
+		this.getUserRepos(this.page, this.per_page);
 	}
 
-	private getUserRepos(page?: number, per_page?: number) {
+	getUserReposBySearch(page: number, per_page: number, search: string) {
+		this.repoService.getAllReposPagedBySearch(String(page), String(per_page), search)
+			.then((repos) => {
+				this.repos = repos;
+				this.loading = false;
+			}).catch(err => console.log(err));
+
+
+	}
+
+	getUserRepos(page: number, per_page: number) {
 		this.repos = [];
 		this.loading = true;
-		this.repoService.getAllReposPaged(page + '', per_page + '').then(
-			(result) => {
+		this.repoService.getAllReposPaged(String(page), String(per_page))
+			.then((repos) => {
 				this.loading = false;
-				this.repos = result.repos;
+				this.repos = repos;
 			}).catch((err) => {
 				console.log(err);
 				notify('Error en listado: Vuelve a loggearte o prueba más tarde');
 				this.dataService.loggedUser(false);
 			});
+
 	}
 
 	getUserRepoByName(reponame: string) {
@@ -51,15 +67,35 @@ export class ListReposUserComponent implements OnInit {
 			});
 	}
 
-	loadPage(step: number) {
-		if (this.page + step >= 0) {
-			this.page += step;
-		}
+	// utilities
+
+	// on keyup start the countdown 
+	searchKeyUp(_event: any) {
+		clearTimeout(this.typingTimer);
+		this.typingTimer = setTimeout(() => {
+			if (this.searchText.length > 3) {
+				this.loading = true;
+				console.log(this.searchText);
+				this.getUserReposBySearch(this.page, this.per_page, this.searchText);
+				this.searchText = '';
+			}
+		}, this.doneTypingInterval);
+	}
+
+	// on keydown clear the countdown
+	searchKeyDown(_event: any) {
+		clearTimeout(this.typingTimer);
+	}
+
+	pageUp() {
+		this.page++;
 		this.getUserRepos(this.page, this.per_page);
 	}
 
-	setPerPage(per_page: number) {
-		this.per_page = per_page;
-		this.loadPage(this.page);
+	pageDown() {
+		if (this.page > 1) {
+			this.page--;
+			this.getUserRepos(this.page, this.per_page);
+		}
 	}
 }
