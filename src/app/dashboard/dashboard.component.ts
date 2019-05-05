@@ -9,24 +9,30 @@ import { DataService } from '../services/DisplayEvents/display-data.service';
 
 export class DashboardComponent implements OnInit {
 
-	public showTokenForm: boolean;
 	public showRepos: boolean;
 	public showDetailedRepo: boolean;
+	public showOrgs: boolean;
 
 	constructor(private dataService: DataService) {
-		this.showTokenForm = false;
 		this.showRepos = false;
 		this.showDetailedRepo = false;
+		this.showOrgs = false;
 	}
 
 	ngOnInit() {
 		this.dataService.content.subscribe((content) => {
-			if (content === this.dataService.repoList.toString()) {
+			if (content === DataService.repoList.toString()) {
 				this.showRepos = true;
 				this.showDetailedRepo = false;
-			} else if (content === this.dataService.repoDetailed.toString()) {
+				this.showOrgs = false;
+			} else if (content === DataService.repoDetailed.toString()) {
 				this.showRepos = false;
 				this.showDetailedRepo = true;
+				this.showOrgs = false;
+			} else if (content === DataService.orgsList.toString()) {
+				this.showRepos = false;
+				this.showDetailedRepo = false;
+				this.showOrgs = true;
 			}
 		});
 	}

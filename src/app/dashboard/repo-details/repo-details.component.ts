@@ -1,9 +1,10 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { GitgraphBranchOptions, GitgraphCommitOptions, GitgraphOptions, Orientation } from '@gitgraph/core';
+import { createGitgraph } from '@gitgraph/js';
 import { Chart } from 'chart.js';
 import PieChartContributionsVM from '../../models/PieChartContributionsVM';
 import { ChartService } from '../../services/ChartService/chart.service';
 import { DataService } from '../../services/DisplayEvents/display-data.service';
-
 @Component({
 	selector: 'app-repo-details',
 	templateUrl: './repo-details.component.html',
@@ -19,6 +20,9 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	private canvasAdded!: ElementRef;
 	@ViewChild('removed')
 	private canvasRemoved!: ElementRef;
+
+	@ViewChild('gitGraph')
+	private gitGraphDiv!: ElementRef;
 
 	private chartCommits!: Chart;
 	private chartAddedLines!: Chart;
@@ -41,6 +45,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	// Somewhere under the class constructor we want to wait for our view
 	// to initialize
 	ngAfterViewInit() {
+		this.getGitGraphData('asd', 6);
 	}
 
 	// change get elemet by id por tag #canvas
@@ -122,5 +127,32 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 			.catch((err) => {
 				console.log(err);
 			});
+	}
+
+	getGitGraphData(reponame: string, depth: number) {
+		const orientation: Orientation = Orientation.VerticalReverse;
+		const gitGraphOptions: GitgraphOptions = {
+			orientation
+		};
+		const gitGraph = createGitgraph(this.gitGraphDiv.nativeElement, gitGraphOptions);
+		const options: GitgraphBranchOptions<any> = {
+			name: 'branch'
+		};
+		const options2: GitgraphBranchOptions<any> = {
+			name: 'branch1'
+		};
+		const commit: GitgraphCommitOptions<any> = {
+			author: 'sergio',
+			tag: 'tag',
+			subject: 'whatever',
+			body: 'body'
+		};
+
+		gitGraph.branch(options);
+		gitGraph.commit(commit);
+		gitGraph.branch(options2);
+		gitGraph.commit(commit);
+		gitGraph.commit(commit);
+
 	}
 }

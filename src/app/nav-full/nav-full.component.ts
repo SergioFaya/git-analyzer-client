@@ -2,22 +2,22 @@ import { Component, Input, OnInit } from '@angular/core';
 import { DataService } from '../services/DisplayEvents/display-data.service';
 
 @Component({
-  selector: 'app-nav-full',
-  templateUrl: './nav-full.component.html',
-  styleUrls: ['./nav-full.component.scss']
+	selector: 'app-nav-full',
+	templateUrl: './nav-full.component.html',
+	styleUrls: ['./nav-full.component.scss']
 })
 export class NavFullComponent implements OnInit {
-  
-  // reference to parent class function
-  @Input() logout!: Function;
-  @Input() loginUrl!: string;
-  imageUrl!: string;
-  logged!: boolean;
 
-  constructor(private dataService: DataService) { }
+	// reference to parent class function
+	@Input() logout!: Function;
+	@Input() loginUrl!: string;
+	imageUrl!: string;
+	logged!: boolean;
 
-  ngOnInit() {
-    this.logged = localStorage.getItem('logged') == 'logged';
+	constructor(private dataService: DataService) { }
+
+	ngOnInit() {
+		this.logged = localStorage.getItem('logged') == 'logged';
 		this.dataService.logged.subscribe((logged) => {
 			this.logged = localStorage.getItem('logged') == 'logged';
 		});
@@ -25,15 +25,14 @@ export class NavFullComponent implements OnInit {
 		this.dataService.image.subscribe((url) => {
 			this.imageUrl = localStorage.getItem('avatarUrl') as string;
 		});
-  }
+	}
 
-  // dashboard content
-  changeDashboardContent(dashboardContent: string) {
-    this.dataService.showDashboard(dashboardContent);
-  }
+	displayRepoList() {
+		this.dataService.showDashboard(DataService.repoList);
+	}
 
-  displayRepoList() {
-    this.changeDashboardContent(this.dataService.repoList);
-  }
+	displayOrganizations() {
+		this.dataService.showDashboard(DataService.orgsList);
+	}
 
 }

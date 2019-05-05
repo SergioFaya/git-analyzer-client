@@ -10,6 +10,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ListReposUserComponent } from './dashboard/list-repos-user/list-repos-user.component';
 import { RepoDetailsComponent } from './dashboard/repo-details/repo-details.component';
 import { BreadcrumsComponent } from './dashboard/breadcrums/breadcrums.component';
+import { ListOwnedOrgsComponent } from './dashboard/list-owned-orgs/list-owned-orgs.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { BreadcrumsComponent } from './dashboard/breadcrums/breadcrums.component
     DashboardComponent,
     ListReposUserComponent,
     RepoDetailsComponent,
-    BreadcrumsComponent
+    BreadcrumsComponent,
+    ListOwnedOrgsComponent
   ],
   imports: [
     BrowserModule,

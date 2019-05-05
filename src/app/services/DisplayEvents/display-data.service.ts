@@ -22,9 +22,11 @@ export class DataService {
 
 	private imageUrl = new BehaviorSubject('');
 	image = this.imageUrl.asObservable();
+
 	// keys to defin which part of the dashboard show
-	public repoList = 'repoList';
-	public repoDetailed = 'repoDetailed';
+	public static repoList = 'repoList';
+	public static repoDetailed = 'repoDetailed';
+	public static orgsList = 'orgsList';
 
 	constructor() { }
 

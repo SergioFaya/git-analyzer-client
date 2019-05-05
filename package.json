@@ -20,6 +20,7 @@
     "@angular/platform-browser": "^6.1.0",
     "@angular/platform-browser-dynamic": "^6.1.0",
     "@angular/router": "^6.1.0",
+    "@gitgraph/js": "^1.0.0-4",
     "@types/chart.js": "^2.7.50",
     "@types/socket.io-client": "^1.4.32",
     "@types/superagent": "^3.8.4",

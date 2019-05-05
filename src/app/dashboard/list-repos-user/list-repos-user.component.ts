@@ -59,7 +59,7 @@ export class ListReposUserComponent implements OnInit {
 				this.repoDetailed = repo;
 				// separar comportamiento en el otro component
 				this.dataService.detailedRepo(this.repoDetailed);
-				this.dataService.showDashboard(this.dataService.repoDetailed);
+				this.dataService.showDashboard(DataService.repoDetailed);
 			}).catch((err) => {
 				console.log(err);
 				notify('Error en listado: Vuelve a loggearte o prueba más tarde');
