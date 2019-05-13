@@ -11,21 +11,38 @@ export class ChartService {
 	readonly SERVER_SERVICE_URL = environment.serverUrl;
 
 	readonly CONTRIBUTORS = '/contributors'
+	readonly GIT_GRAPH = '/charts/gitTree';
+
 	constructor(private http: HttpClient) { }
 
+	private accessToken = localStorage.getItem('accessToken') as string;
+	private githubToken = localStorage.getItem('githubToken') as string;
 
 	getContributorsForPieChart(reponame: string): Promise<any> {
-		const accessToken = localStorage.getItem('accessToken') as string;
-		const githubToken = localStorage.getItem('githubToken') as string;
+
 		const headers = {
 			'Content-Type': 'application/json',
-			'x-access-token': accessToken,
-			'x-github-token': githubToken,
+			'x-access-token': this.accessToken,
+			'x-github-token': this.githubToken,
 			'reponame': reponame,
 		};
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
 		};
 		return this.http.get(this.SERVER_SERVICE_URL + this.CONTRIBUTORS, httpOptions).toPromise();
+	}
+
+	getParsedDataForGitGraph(reponame: string): Promise<any> {
+		const headers = {
+			'Content-Type': 'application/json',
+			'x-access-token': this.accessToken,
+			'x-github-token': this.githubToken,
+			//'username': username,
+			'reponame': reponame,
+		};
+		const httpOptions = {
+			headers: new HttpHeaders(headers)
+		};
+		return this.http.get(this.SERVER_SERVICE_URL + this.GIT_GRAPH, httpOptions).toPromise();
 	}
 }

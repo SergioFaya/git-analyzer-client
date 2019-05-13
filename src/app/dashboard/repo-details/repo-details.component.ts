@@ -1,6 +1,4 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { GitgraphBranchOptions, GitgraphCommitOptions, GitgraphOptions, Orientation } from '@gitgraph/core';
-import { createGitgraph } from '@gitgraph/js';
 import { Chart } from 'chart.js';
 import PieChartContributionsVM from '../../models/PieChartContributionsVM';
 import { ChartService } from '../../services/ChartService/chart.service';
@@ -45,7 +43,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	// Somewhere under the class constructor we want to wait for our view
 	// to initialize
 	ngAfterViewInit() {
-		this.getGitGraphData('asd', 6);
+		this.getGitGraphData();
 	}
 
 	// change get elemet by id por tag #canvas
@@ -129,30 +127,37 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 	}
 
-	getGitGraphData(reponame: string, depth: number) {
-		const orientation: Orientation = Orientation.VerticalReverse;
-		const gitGraphOptions: GitgraphOptions = {
-			orientation
-		};
-		const gitGraph = createGitgraph(this.gitGraphDiv.nativeElement, gitGraphOptions);
-		const options: GitgraphBranchOptions<any> = {
-			name: 'branch'
-		};
-		const options2: GitgraphBranchOptions<any> = {
-			name: 'branch1'
-		};
-		const commit: GitgraphCommitOptions<any> = {
-			author: 'sergio',
-			tag: 'tag',
-			subject: 'whatever',
-			body: 'body'
-		};
+	getGitGraphData() {
 
-		gitGraph.branch(options);
-		gitGraph.commit(commit);
-		gitGraph.branch(options2);
-		gitGraph.commit(commit);
-		gitGraph.commit(commit);
+		this.chartService.getParsedDataForGitGraph(this.repo)
+			.then((result) => {
+				this.displayNetworkChart(result);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
 
+	}
+
+	displayNetworkChart(result: any) {
+
+		var s = new sigma(
+			{
+				renderer: {
+					container: this.gitGraphDiv.nativeElement,
+					type: 'canvas'
+				},
+				settings: {
+					minEdgeSize: 0.1,
+					maxEdgeSize: 5,
+					minNodeSize: 1,
+					maxNodeSize: 10,
+				}
+			}
+		);
+		// Load the graph in sigma
+		s.graph.read(result);
+		// Ask sigma to draw it
+		s.refresh();
 	}
 }
