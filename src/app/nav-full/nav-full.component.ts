@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataService } from '../services/DisplayEvents/display-data.service';
+import { DisplayDashboardService } from '../services/DisplayEvents/display-data.service';
 
 @Component({
 	selector: 'app-nav-full',
@@ -14,7 +14,7 @@ export class NavFullComponent implements OnInit {
 	imageUrl!: string;
 	logged!: boolean;
 
-	constructor(private dataService: DataService) { }
+	constructor(private dataService: DisplayDashboardService) { }
 
 	ngOnInit() {
 		this.logged = localStorage.getItem('logged') == 'logged';
@@ -28,11 +28,15 @@ export class NavFullComponent implements OnInit {
 	}
 
 	displayRepoList() {
-		this.dataService.showDashboard(DataService.repoList);
+		this.dataService.showDashboard(DisplayDashboardService.repoList);
 	}
 
 	displayOrganizations() {
-		this.dataService.showDashboard(DataService.orgsList);
+		this.dataService.showDashboard(DisplayDashboardService.orgsList);
+	}
+
+	displayCodeReview() {
+		this.dataService.showDashboard(DisplayDashboardService.codeReview);
 	}
 
 }

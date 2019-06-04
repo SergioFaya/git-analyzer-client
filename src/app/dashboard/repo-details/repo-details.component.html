@@ -5,6 +5,13 @@
 			<div class=" uk-align-right uk-text-small"></div>
 		</span>
 	</h2>
+
+	<!-- GIT GRAPH -->
+	<div
+		class="uk-card uk-card-default uk-card-body uk-panel uk-panel-scrollable uk-height-max-large custom-scroll-panel uk-margin-top uk-margin-bottom">
+		<div #gitGraph></div>
+		<button class="uk-button" (click)="this.loadNetworkGraph();">Reload Network Chart</button>
+	</div>
 	<!-- DATA TABLE -->
 	<div class="uk-card uk-card-default">
 		<div class="uk-card-header">
@@ -31,13 +38,13 @@
 							{{item.login}}
 						</td>
 						<td>
-							{{item.modifications.a}}
+							{{item.modifications.a == -1 ? '-' : item.modifications.a}}
 						</td>
 						<td>
-							{{item.modifications.d}}
+							{{item.modifications.d == -1 ? '-' : item.modifications.d}}
 						</td>
 						<td>
-							{{item.modifications.c}}
+							{{item.modifications.c == -1 ? '-' : item.modifications.c}}
 						</td>
 					</tr>
 				</tbody>
@@ -46,7 +53,8 @@
 	</div>
 
 	<!-- PIE CHARTS -->
-	<div class="uk-grid-small uk-grid-width-1-3 uk-child-width-expand@m uk-text-center uk-margin-top" uk-grid>
+	<div class="uk-grid-small uk-grid-width-1-3 uk-child-width-expand@m uk-text-center uk-margin-top uk-margin-bottom"
+		uk-grid>
 		<div>
 			<div class="uk-card uk-card-default uk-card-body"><canvas #commits id='commits' width="inherit"
 					height="300px"></canvas></div>
@@ -59,11 +67,6 @@
 			<div class="uk-card uk-card-default uk-card-body"><canvas #removed id='removed' width="inherit"
 					height="300px"></canvas></div>
 		</div>
-	</div>
-
-	<div
-		class="uk-card uk-card-default uk-card-body uk-panel uk-panel-scrollable uk-height-max-large custom-scroll-panel uk-margin-top uk-margin-bottom">
-		<div #gitGraph></div>
 	</div>
 </div>
 

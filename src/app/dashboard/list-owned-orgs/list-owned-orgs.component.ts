@@ -10,7 +10,6 @@ export class ListOwnedOrgsComponent implements OnInit {
 	constructor() { }
 
 	ngOnInit() {
-		// /user/organizations
 	}
 
 }

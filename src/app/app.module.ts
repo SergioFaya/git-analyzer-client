@@ -1,34 +1,37 @@
-import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-
+import { BrowserModule } from '@angular/platform-browser';
+import { SimplemdeModule } from 'ngx-simplemde';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
-import { NavFullComponent } from './nav-full/nav-full.component';
-import { NavLateralComponent } from './nav-lateral/nav-lateral.component';
+import { BreadcrumsComponent } from './dashboard/breadcrums/breadcrums.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { ListOwnedOrgsComponent } from './dashboard/list-owned-orgs/list-owned-orgs.component';
 import { ListReposUserComponent } from './dashboard/list-repos-user/list-repos-user.component';
 import { RepoDetailsComponent } from './dashboard/repo-details/repo-details.component';
-import { BreadcrumsComponent } from './dashboard/breadcrums/breadcrums.component';
-import { ListOwnedOrgsComponent } from './dashboard/list-owned-orgs/list-owned-orgs.component';
+import { NavFullComponent } from './nav-full/nav-full.component';
+import { NavLateralComponent } from './nav-lateral/nav-lateral.component';
+import { CodeReviewComponent } from './dashboard/code-review/code-review.component';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    NavFullComponent,
-    NavLateralComponent,
-    DashboardComponent,
-    ListReposUserComponent,
-    RepoDetailsComponent,
-    BreadcrumsComponent,
-    ListOwnedOrgsComponent
-  ],
-  imports: [
-    BrowserModule,
-    HttpClientModule,
-    FormsModule,
-  ],
-  providers: [],
-  bootstrap: [AppComponent]
+	declarations: [
+		AppComponent,
+		NavFullComponent,
+		NavLateralComponent,
+		DashboardComponent,
+		ListReposUserComponent,
+		RepoDetailsComponent,
+		BreadcrumsComponent,
+		ListOwnedOrgsComponent,
+		CodeReviewComponent
+	],
+	imports: [
+		BrowserModule,
+		HttpClientModule,
+		FormsModule,
+		SimplemdeModule,
+	],
+	providers: [],
+	bootstrap: [AppComponent]
 })
 export class AppModule { }

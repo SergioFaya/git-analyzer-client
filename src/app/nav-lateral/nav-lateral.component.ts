@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { DataService } from '../services/DisplayEvents/display-data.service';
+import { DisplayDashboardService } from '../services/DisplayEvents/display-data.service';
 
 @Component({
 	selector: 'app-nav-lateral',
@@ -14,7 +14,7 @@ export class NavLateralComponent implements OnInit {
 	imageUrl!: string;
 	logged!: boolean;
 
-	constructor(private dataService: DataService) { }
+	constructor(private dataService: DisplayDashboardService) { }
 
 	ngOnInit() {
 		this.logged = localStorage.getItem('logged') == 'logged';
@@ -33,6 +33,6 @@ export class NavLateralComponent implements OnInit {
 	}
 
 	displayRepoList() {
-		this.changeDashboardContent(DataService.repoList);
+		this.changeDashboardContent(DisplayDashboardService.repoList);
 	}
 }

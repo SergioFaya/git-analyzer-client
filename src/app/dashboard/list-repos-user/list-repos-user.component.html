@@ -1,27 +1,31 @@
 <div class="uk-container-large">
-	<h3>List of repos <span>&nbsp;<i *ngIf="loading" class="fas fa-spinner fa-pulse"></i>
-			<div class=" uk-align-right uk-text-small">
-				<form class="uk-search uk-search-default uk-text-bold">
+	<div class="uk-grid">
+		<div class="uk-width-1-2">
+			<h3>List of repos <span>&nbsp;<i *ngIf="loading" class="fas fa-spinner fa-pulse"></i>
+				</span>
+			</h3>
+		</div>
+		<div class="uk-width-1-2">
+			<div class="uk-align-right uk-text-small">
+				<form class="uk-search uk-search-default uk-text-bold uk-box-shadow-medium">
 					<span uk-search-icon></span>
 					<input (keydown)="searchKeyDown($event)" (keyup)="searchKeyUp($event)" [(ngModel)]="searchText"
 						class="uk-search-input search-box" type="search" placeholder="Search..." name="searchText">
 				</form>
-
 				<!--
-				<label for="form-horizontal-select" class="uk-text-small">
-					Paging:&nbsp;
-				</label>
-
-				<select class="uk-select uk-form-width-xsmall" id="form-horizontal-select">
-					<option (click)="setPerPage(5)">5</option>
-					<option (click)="setPerPage(10)">10</option>
-					<option (click)="setPerPage(50)">50</option>
-				</select>
-				-->
+						<label for="form-horizontal-select" class="uk-text-small">
+							Paging:&nbsp;
+						</label>
+		
+						<select class="uk-select uk-form-width-xsmall" id="form-horizontal-select">
+							<option (click)="setPerPage(5)">5</option>
+							<option (click)="setPerPage(10)">10</option>
+							<option (click)="setPerPage(50)">50</option>
+						</select>
+						-->
 			</div>
-
-		</span>
-	</h3>
+		</div>
+	</div>
 
 	<div *ngFor="let repo of repos;">
 		<div class="uk-card uk-card-default uk-margin-top">
@@ -35,11 +39,12 @@
 		</div>
 	</div>
 
-
-	<ul class="uk-pagination">
-		<li><a (click)="pageDown()"><span class="uk-margin-small-right" uk-pagination-previous></span>
-				Previous</a></li>
-		<li class="uk-margin-auto-left"><a (click)="pageUp()">Next <span class="uk-margin-small-left"
-					uk-pagination-next></span></a></li>
-	</ul>
+	<div class="uk-card uk-card-default uk-padding-small uk-margin-top">
+		<ul class="uk-pagination pagination-no-margin">
+			<li><a (click)="pageDown()"><span class="uk-margin-small-right" uk-pagination-previous></span>
+					Previous</a></li>
+			<li class="uk-margin-auto-left"><a (click)="pageUp()">Next <span class="uk-margin-small-left"
+						uk-pagination-next></span></a></li>
+		</ul>
+	</div>
 </div>

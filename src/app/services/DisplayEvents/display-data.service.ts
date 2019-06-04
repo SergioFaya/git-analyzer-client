@@ -8,7 +8,7 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
 	providedIn: 'root'
 })
-export class DataService {
+export class DisplayDashboardService {
 
 	private currentDashboardContent = new BehaviorSubject('');
 	content = this.currentDashboardContent.asObservable();
@@ -23,10 +23,11 @@ export class DataService {
 	private imageUrl = new BehaviorSubject('');
 	image = this.imageUrl.asObservable();
 
-	// keys to defin which part of the dashboard show
+	// keys to define which part of the dashboard show
 	public static repoList = 'repoList';
 	public static repoDetailed = 'repoDetailed';
 	public static orgsList = 'orgsList';
+	public static codeReview = 'codeReview';
 
 	constructor() { }
 

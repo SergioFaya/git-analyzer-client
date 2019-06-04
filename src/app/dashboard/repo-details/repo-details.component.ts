@@ -4,7 +4,7 @@ import { Chart } from 'chart.js';
 import { sigma as Sigma } from 'sigma';
 import PieChartContributionsVM from '../../models/PieChartContributionsVM';
 import { ChartService } from '../../services/ChartService/chart.service';
-import { DataService } from '../../services/DisplayEvents/display-data.service';
+import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
 import { addClassToElement, generateRandomColor, removeClassFromElement } from '../../util/util';
 @Component({
 	selector: 'app-repo-details',
@@ -47,13 +47,17 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	private insertedLines: any = [];
 	private removedLines: any = [];
 
-	constructor(private dataService: DataService, private chartService: ChartService) {
+	constructor(private dataService: DisplayDashboardService, private chartService: ChartService) {
 		this.loading = true;
 	}
 
 	// Somewhere under the class constructor we want to wait for our view
 	// to initialize
 	ngAfterViewInit() {
+		this.loadNetworkGraph();
+	}
+
+	loadNetworkGraph() {
 		this.getGitGraphData(this.repo.full_name);
 	}
 
@@ -186,6 +190,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 				batchEdgesDrawing: true,
 				minEdgeSize: 0.5,
 				maxEdgeSize: 4,
+				// hacer tamaño dependiente del tamaño del grafoo¡,
 				minNodeSize: 1,
 				maxNodeSize: 8
 			}

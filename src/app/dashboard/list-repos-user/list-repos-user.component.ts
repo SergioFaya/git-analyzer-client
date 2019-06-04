@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import Repo from '../../models/Repo';
-import { DataService } from '../../services/DisplayEvents/display-data.service';
+import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
 import { RepoService } from '../../services/RepoService/repo.service';
 import { notify } from '../../util/util';
 @Component({
@@ -21,7 +21,7 @@ export class ListReposUserComponent implements OnInit {
 	private typingTimer: any;
 	private doneTypingInterval = 2000;
 
-	constructor(private dataService: DataService, private repoService: RepoService) { }
+	constructor(private dataService: DisplayDashboardService, private repoService: RepoService) { }
 
 	ngOnInit() {
 		this.loading = true;
@@ -59,7 +59,7 @@ export class ListReposUserComponent implements OnInit {
 				this.repoDetailed = repo;
 				// separar comportamiento en el otro component
 				this.dataService.detailedRepo(this.repoDetailed);
-				this.dataService.showDashboard(DataService.repoDetailed);
+				this.dataService.showDashboard(DisplayDashboardService.repoDetailed);
 			}).catch((err) => {
 				console.log(err);
 				notify('Error en listado: Vuelve a loggearte o prueba más tarde');

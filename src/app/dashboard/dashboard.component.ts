@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { DataService } from '../services/DisplayEvents/display-data.service';
+import { DisplayDashboardService } from '../services/DisplayEvents/display-data.service';
 
 @Component({
 	selector: 'app-dashboard',
@@ -12,27 +12,37 @@ export class DashboardComponent implements OnInit {
 	public showRepos: boolean;
 	public showDetailedRepo: boolean;
 	public showOrgs: boolean;
+	public showCodeReview: boolean;
 
-	constructor(private dataService: DataService) {
+	constructor(private dataService: DisplayDashboardService) {
 		this.showRepos = false;
 		this.showDetailedRepo = false;
 		this.showOrgs = false;
+		this.showCodeReview = false;
 	}
 
 	ngOnInit() {
 		this.dataService.content.subscribe((content) => {
-			if (content === DataService.repoList.toString()) {
+			if (content === DisplayDashboardService.repoList.toString()) {
 				this.showRepos = true;
 				this.showDetailedRepo = false;
 				this.showOrgs = false;
-			} else if (content === DataService.repoDetailed.toString()) {
+				this.showCodeReview = false;
+			} else if (content === DisplayDashboardService.repoDetailed.toString()) {
 				this.showRepos = false;
 				this.showDetailedRepo = true;
 				this.showOrgs = false;
-			} else if (content === DataService.orgsList.toString()) {
+				this.showCodeReview = false;
+			} else if (content === DisplayDashboardService.orgsList.toString()) {
 				this.showRepos = false;
 				this.showDetailedRepo = false;
 				this.showOrgs = true;
+				this.showCodeReview = false;
+			} else if (content === DisplayDashboardService.codeReview.toString()) {
+				this.showRepos = false;
+				this.showDetailedRepo = false;
+				this.showOrgs = false;
+				this.showCodeReview = true;
 			}
 		});
 	}
