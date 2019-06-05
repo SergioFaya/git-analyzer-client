@@ -49,8 +49,9 @@ export class CodeReviewComponent implements OnInit {
 
 	validateCodeReview(): boolean {
 		if (this.review.title && this.review.title.length > 0 && this.review.calification) {
-			const username = localStorage.getItem('username') as string;
-			this.review.created_by = username;
+			// obtener userdata
+			const user = localStorage.getItem('username') as string;
+			this.review.created_by = user;
 			return true;
 		}
 		return false;
