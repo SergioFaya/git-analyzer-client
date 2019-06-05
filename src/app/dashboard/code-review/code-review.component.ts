@@ -1,8 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import ICodeReview from '../../models/ICodeReview';
+import { ICodeReview } from 'git-analyzer-types';
 import { CodeReviewService } from '../../services/CodeReviewService/code-review.service';
 import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
-import { notify } from '../../util/util';
+import { getUserDataFromLocalStorage, notify } from '../../util/util';
 
 
 @Component({
@@ -49,9 +49,8 @@ export class CodeReviewComponent implements OnInit {
 
 	validateCodeReview(): boolean {
 		if (this.review.title && this.review.title.length > 0 && this.review.calification) {
-			// obtener userdata
-			const user = localStorage.getItem('username') as string;
-			this.review.created_by = user;
+			const userData = getUserDataFromLocalStorage();
+			this.review.created_by = userData;
 			return true;
 		}
 		return false;

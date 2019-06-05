@@ -1,11 +1,11 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
+import { IPieChartContributionsVM } from 'git-analyzer-types';
 // @ts-ignore
 import { sigma as Sigma } from 'sigma';
-import PieChartContributionsVM from '../../models/PieChartContributionsVM';
 import { ChartService } from '../../services/ChartService/chart.service';
 import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
-import { addClassToElement, generateRandomColor, removeClassFromElement } from '../../util/util';
+import { addClassToElement, generateRandomColor, getUserDataFromLocalStorage, removeClassFromElement } from '../../util/util';
 @Component({
 	selector: 'app-repo-details',
 	templateUrl: './repo-details.component.html',
@@ -38,7 +38,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	private chartRemovedLines!: Chart;
 
 	public repo: any;
-	public contributions!: Array<PieChartContributionsVM>;
+	public contributions!: Array<IPieChartContributionsVM>;
 	public loading: boolean = false;
 
 	private colors = Array<string>();
@@ -58,7 +58,8 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	loadNetworkGraph() {
-		this.getGitGraphData(this.repo.full_name);
+		const username = getUserDataFromLocalStorage().login;
+		this.getGitGraphData(username!, this.repo.full_name);
 	}
 
 	ngOnInit() {
@@ -115,8 +116,8 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 		this.chartService.getContributorsForPieChart(reponame)
 			.then((result) => {
 				this.loading = false;
-				this.contributions = result.contributionsVM as Array<PieChartContributionsVM>;
-				this.contributions.map((contrib: PieChartContributionsVM) => {
+				this.contributions = result.contributionsVM as Array<IPieChartContributionsVM>;
+				this.contributions.map((contrib: IPieChartContributionsVM) => {
 					this.dataPre.push(contrib.modifications.c);
 					this.insertedLines.push(contrib.modifications.a);
 					this.removedLines.push(contrib.modifications.d);
@@ -134,8 +135,8 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 			});
 	}
 
-	getGitGraphData(reponame: string) {
-		this.chartService.getParsedDataForGitGraph(reponame)
+	getGitGraphData(username: string, reponame: string) {
+		this.chartService.getParsedDataForGitGraph(username, reponame)
 			.then((result) => {
 				this.displayNetworkChart(result);
 			})

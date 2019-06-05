@@ -1,6 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { getTokensFromStorage } from 'src/app/util/util';
+import { Keys } from 'src/app/models/Keys';
 
 
 @Injectable({
@@ -23,7 +25,7 @@ export class AuthService {
 				'Content-Type': 'application/json',
 			})
 		}
-		const body = { 'x-access-token': localStorage.getItem('accessToken') };
+		const body = { 'x-access-token': localStorage.getItem(Keys.ACCESS_TOKEN) };
 		return this.http.post(this.AUTH_SERVICE_URL + this.LOGOUT_ADDRESS, body, httpOptions).toPromise();
 	}
 
@@ -31,14 +33,12 @@ export class AuthService {
 		const httpOptions = {
 			headers: new HttpHeaders({ 'Content-Type': 'application/json' })
 		};
-		// TODO: meter las rutas de la api en un fichero de configuración
 		return this.http.get(this.AUTH_SERVICE_URL + this.LOGIN_ADDRESS, httpOptions).toPromise();
 	}
 
 	// TODO: llamarla para pillar la foto y la info básica
 	getUserInfo(): Promise<any> {
-		const accessToken = localStorage.getItem('accessToken') as string;
-		const githubToken = localStorage.getItem('githubToken') as string;
+		const {accessToken,githubToken} = getTokensFromStorage();
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,

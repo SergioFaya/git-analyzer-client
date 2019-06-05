@@ -27,6 +27,7 @@
     "@types/uikit": "^2.27.7",
     "chart.js": "^2.7.3",
     "core-js": "^2.5.4",
+    "git-analyzer-types": "^1.1.4",
     "jquery": "^3.3.1",
     "rxjs": "~6.2.0",
     "superagent": "^4.0.0",

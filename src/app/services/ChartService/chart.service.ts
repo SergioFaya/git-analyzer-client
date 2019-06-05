@@ -32,12 +32,12 @@ export class ChartService {
 		return this.http.get(this.SERVER_SERVICE_URL + this.CONTRIBUTORS, httpOptions).toPromise();
 	}
 
-	getParsedDataForGitGraph(reponame: string): Promise<any> {
+	getParsedDataForGitGraph(username: string, reponame: string): Promise<any> {
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': this.accessToken,
 			'x-github-token': this.githubToken,
-			//'username': username,
+			'username': username,
 			'reponame': reponame,
 		};
 		const httpOptions = {

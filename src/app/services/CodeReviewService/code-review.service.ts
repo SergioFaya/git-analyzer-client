@@ -1,7 +1,8 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { ICodeReview } from 'git-analyzer-types';
+import { getTokensFromStorage } from 'src/app/util/util';
 import { environment } from '../../../environments/environment.prod';
-import ICodeReview from '../../models/ICodeReview';
 
 
 @Injectable({
@@ -20,13 +21,11 @@ export class CodeReviewService {
 
 	constructor(private http: HttpClient) { }
 
-	private accessToken = localStorage.getItem('accessToken') as string;
-	// private githubToken = localStorage.getItem('githubToken') as string;
-
 	findAll() {
+		const { accessToken } = getTokensFromStorage()
 		const headers = {
 			'Content-Type': 'application/json',
-			'x-access-token': this.accessToken,
+			'x-access-token': accessToken,
 			//'x-github-token': this.githubToken,
 		};
 		const httpOptions = {
@@ -36,9 +35,10 @@ export class CodeReviewService {
 	}
 
 	newCodeReview(review: ICodeReview) {
+		const { accessToken } = getTokensFromStorage()
 		const headers = {
 			'Content-Type': 'application/json',
-			'x-access-token': this.accessToken,
+			'x-access-token': accessToken,
 		};
 		const params = new HttpParams();
 		params.append('review', review.toString())

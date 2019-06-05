@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import Repo from '../../models/Repo';
+import { IRepo } from 'git-analyzer-types';
 import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
 import { RepoService } from '../../services/RepoService/repo.service';
 import { notify } from '../../util/util';
@@ -10,7 +10,7 @@ import { notify } from '../../util/util';
 })
 export class ListReposUserComponent implements OnInit {
 
-	public repos!: Array<Repo>;
+	public repos!: Array<IRepo>;
 	repoDetailed: any;
 	public per_page = 5;
 	public page = 1;

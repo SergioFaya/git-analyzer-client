@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import * as socketIo from 'socket.io-client';
 import { environment } from '../environments/environment';
+import { Keys } from './models/Keys';
 import { AuthService } from './services/AuthService/auth.service';
 import { DisplayDashboardService } from './services/DisplayEvents/display-data.service';
 import { notify } from './util/util';
@@ -39,9 +40,9 @@ export class AppComponent implements OnInit {
 		this.adaptToSize(size);
 
 		this.getLoginUrl();
-		this.logged = localStorage.getItem('logged') == 'logged';
+		this.logged = localStorage.getItem(Keys.LOGGED) == Keys.LOGGED;
 		this.dataService.logged.subscribe((logged) => {
-			this.logged = localStorage.getItem('logged') == 'logged';
+			this.logged = localStorage.getItem(Keys.LOGGED) == Keys.LOGGED;
 		});
 	}
 
@@ -72,26 +73,22 @@ export class AppComponent implements OnInit {
 
 	private login(token: string, githubToken: string) {
 		this.storeTokens(token, githubToken)
-		localStorage.setItem('logged', 'logged');
+		localStorage.setItem(Keys.LOGGED, Keys.LOGGED);
 		this.dataService.loggedUser(true);
 		this.authService.getUserInfo()
 			.then((result: any) => {
-				// TODO: guardar todos los datos del usuario para las peticiones de la api
-				localStorage.setItem('avatarUrl', result.userData.imageUrl);
-				localStorage.setItem('username', result.userData.login);
-				localStorage.setItem('userData', result.userData.toString());
-				this.dataService.imageUrlContent(result.userData.imageUrl);
+				localStorage.setItem(Keys.USER_DATA, JSON.stringify(result.userData));
+				this.dataService.imageUrlContent(result.userData.imageUrl!);
 			})
-			.catch((err: any) => console.log(err));
+			.catch((err: Error) => console.log(err));
 	}
 
 	public logOut() {
 		this.authService.logOut()
 			.then(() => {
-				notify('Taluego');
 				this.dataService.loggedUser(false);
-				localStorage.setItem('logged', '');
-				localStorage.setItem('avatarUrl', '');
+				localStorage.setItem(Keys.LOGGED, '');
+				localStorage.setItem(Keys.USER_DATA, '{}');
 				this.storeTokens('', '');
 			}).then(() => {
 				// recargamos la página para eliminar la info del usuario
@@ -102,8 +99,8 @@ export class AppComponent implements OnInit {
 	}
 
 	private storeTokens(accessToken: string, githubToken: string) {
-		localStorage.setItem('githubToken', githubToken);
-		localStorage.setItem('accessToken', accessToken);
+		localStorage.setItem(Keys.GITHUB_TOKEN, githubToken);
+		localStorage.setItem(Keys.ACCESS_TOKEN, accessToken);
 	}
 
 	public send(event: string, message: string): void {

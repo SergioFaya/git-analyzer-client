@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { getTokensFromStorage } from 'src/app/util/util';
 
 @Injectable({
 	providedIn: 'root'
@@ -17,8 +18,8 @@ export class RepoService {
 	constructor(private http: HttpClient) { }
 
 	public getAllRepos(): Promise<any> {
-		const accessToken = localStorage.getItem('accessToken') as string;
-		const githubToken = localStorage.getItem('githubToken') as string;
+		
+		const {accessToken,githubToken} = getTokensFromStorage();
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
@@ -31,8 +32,9 @@ export class RepoService {
 	}
 
 	public getAllReposPaged(page: string, per_page: string): Promise<any> {
-		const accessToken = localStorage.getItem('accessToken') as string;
-		const githubToken = localStorage.getItem('githubToken') as string;
+		
+		const {accessToken,githubToken} = getTokensFromStorage();
+		
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
@@ -52,8 +54,9 @@ export class RepoService {
 	}
 
 	public getAllReposPagedBySearch(page: string, per_page: string, search: string): Promise<any> {
-		const accessToken = localStorage.getItem('accessToken') as string;
-		const githubToken = localStorage.getItem('githubToken') as string;
+		
+		const {accessToken,githubToken} = getTokensFromStorage();
+		
 		const username = localStorage.getItem('username') as string;
 		const headers = {
 			'Content-Type': 'application/json',
@@ -77,8 +80,7 @@ export class RepoService {
 	}
 
 	public getRepoByName(reponame: string): Promise<any> {
-		const accessToken = localStorage.getItem('accessToken') as string;
-		const githubToken = localStorage.getItem('githubToken') as string;
+		const {accessToken,githubToken} = getTokensFromStorage();
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
