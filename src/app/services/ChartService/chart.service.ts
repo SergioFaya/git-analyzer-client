@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
+import { getTokensFromStorage } from '../../util/util';
 
 @Injectable({
 	providedIn: 'root'
@@ -11,19 +12,16 @@ export class ChartService {
 	readonly SERVER_SERVICE_URL = environment.serverUrl;
 
 	readonly CONTRIBUTORS = '/contributors'
-	readonly GIT_GRAPH = '/charts/gitTree';
+	readonly GIT_CHART = '/chart/gitTree';
 
 	constructor(private http: HttpClient) { }
 
-	private accessToken = localStorage.getItem('accessToken') as string;
-	private githubToken = localStorage.getItem('githubToken') as string;
-
 	getContributorsForPieChart(reponame: string): Promise<any> {
-
+		const { accessToken, githubToken } = getTokensFromStorage();
 		const headers = {
 			'Content-Type': 'application/json',
-			'x-access-token': this.accessToken,
-			'x-github-token': this.githubToken,
+			'x-access-token': accessToken,
+			'x-github-token': githubToken,
 			'reponame': reponame,
 		};
 		const httpOptions = {
@@ -33,16 +31,17 @@ export class ChartService {
 	}
 
 	getParsedDataForGitGraph(username: string, reponame: string): Promise<any> {
+		const { accessToken, githubToken } = getTokensFromStorage();
 		const headers = {
 			'Content-Type': 'application/json',
-			'x-access-token': this.accessToken,
-			'x-github-token': this.githubToken,
+			'x-access-token': accessToken,
+			'x-github-token': githubToken,
 			'username': username,
 			'reponame': reponame,
 		};
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
 		};
-		return this.http.get(this.SERVER_SERVICE_URL + this.GIT_GRAPH, httpOptions).toPromise();
+		return this.http.get(this.SERVER_SERVICE_URL + this.GIT_CHART, httpOptions).toPromise();
 	}
 }

@@ -10,8 +10,10 @@
 				<form class="uk-search uk-search-default uk-text-bold uk-box-shadow-medium">
 					<span uk-search-icon></span>
 					<input (keydown)="searchKeyDown($event)" (keyup)="searchKeyUp($event)" [(ngModel)]="searchText"
-						class="uk-search-input search-box" type="search" placeholder="Search..." name="searchText">
+						class="uk-search-input search-box" type="search" placeholder="Search..." name="searchText" />
 				</form>
+				<button (click)="getUserReposBySearch()"
+					class="uk-button uk-button-default uk-button-primary uk-margin-small-left uk-box-shadow-medium">All</button>
 				<!--
 						<label for="form-horizontal-select" class="uk-text-small">
 							Paging:&nbsp;
@@ -31,15 +33,18 @@
 		<div class="uk-card uk-card-default uk-margin-top">
 			<div class="uk-card-body uk-padding-small">
 				<h5 class="h-five-small-margin">{{repo.full_name}}</h5>
+
 				<button (click)='getUserRepoByName(repo.full_name)'
 					class="uk-button uk-button-secondary uk-margin-right">See
 					detailed</button>
 				<a class="uk-button uk-button-primary" [href]="repo.html_url">See on github</a>
+
+
 			</div>
 		</div>
 	</div>
 
-	<div class="uk-card uk-card-default uk-padding-small uk-margin-top">
+	<div class="uk-card uk-card-default uk-padding-small uk-margin-top uk-margin-bottom">
 		<ul class="uk-pagination pagination-no-margin">
 			<li><a (click)="pageDown()"><span class="uk-margin-small-right" uk-pagination-previous></span>
 					Previous</a></li>

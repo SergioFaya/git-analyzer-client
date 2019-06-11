@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { getTokensFromStorage, getUserDataFromLocalStorage } from 'src/app/util/util';
 import { environment } from '../../../environments/environment';
-import { getTokensFromStorage } from 'src/app/util/util';
 
 @Injectable({
 	providedIn: 'root'
@@ -15,15 +15,19 @@ export class RepoService {
 	readonly SEARCH: string = '/repos/search';
 	readonly REPO_BY_NAME: string = '/repos/reponame';
 
+	readonly COMMITS: string = '/commits';
+
 	constructor(private http: HttpClient) { }
 
 	public getAllRepos(): Promise<any> {
-		
-		const {accessToken,githubToken} = getTokensFromStorage();
+
+		const username = getUserDataFromLocalStorage().username as string;
+		const { accessToken, githubToken } = getTokensFromStorage();
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
-			'x-github-token': githubToken
+			'x-github-token': githubToken,
+			'username': username
 		};
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
@@ -32,9 +36,9 @@ export class RepoService {
 	}
 
 	public getAllReposPaged(page: string, per_page: string): Promise<any> {
-		
-		const {accessToken,githubToken} = getTokensFromStorage();
-		
+
+		const { accessToken, githubToken } = getTokensFromStorage();
+
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
@@ -53,11 +57,16 @@ export class RepoService {
 		return this.http.get(this.SERVER_SERVICE_URL + this.ALL_REPOS, httpOptions).toPromise();
 	}
 
-	public getAllReposPagedBySearch(page: string, per_page: string, search: string): Promise<any> {
-		
-		const {accessToken,githubToken} = getTokensFromStorage();
-		
-		const username = localStorage.getItem('username') as string;
+	public getAllReposPagedBySearch(search: string, username?: string): Promise<any> {
+
+		const { accessToken, githubToken } = getTokensFromStorage();
+		var name;
+		if (username) {
+			name = username;
+		} else {
+			name = localStorage.getItem('username') as string;
+		}
+
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
@@ -65,9 +74,7 @@ export class RepoService {
 		};
 		const params: HttpParams = new HttpParams({
 			fromObject: {
-				page,
-				per_page,
-				username,
+				name,
 				search
 			},
 		});
@@ -80,7 +87,7 @@ export class RepoService {
 	}
 
 	public getRepoByName(reponame: string): Promise<any> {
-		const {accessToken,githubToken} = getTokensFromStorage();
+		const { accessToken, githubToken } = getTokensFromStorage();
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
@@ -91,5 +98,20 @@ export class RepoService {
 			headers: new HttpHeaders(headers)
 		};
 		return this.http.get(this.SERVER_SERVICE_URL + this.REPO_BY_NAME, httpOptions).toPromise();
+	}
+
+	public getCommitOfRepo(reponame: string, commitSha: string) {
+		const { accessToken, githubToken } = getTokensFromStorage();
+		const headers = {
+			'Content-Type': 'application/json',
+			'x-access-token': accessToken,
+			'x-github-token': githubToken,
+			'reponame': reponame,
+			'sha': commitSha
+		};
+		const httpOptions = {
+			headers: new HttpHeaders(headers)
+		};
+		return this.http.get(this.SERVER_SERVICE_URL + this.COMMITS, httpOptions).toPromise();
 	}
 }

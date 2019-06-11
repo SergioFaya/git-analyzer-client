@@ -1,10 +1,11 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import { IPieChartContributionsVM } from 'git-analyzer-types';
+import { IPieChartContributionsVM, ITooltipNode } from 'git-analyzer-types';
 // @ts-ignore
 import { sigma as Sigma } from 'sigma';
 import { ChartService } from '../../services/ChartService/chart.service';
 import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
+import { RepoService } from '../../services/RepoService/repo.service';
 import { addClassToElement, generateRandomColor, getUserDataFromLocalStorage, removeClassFromElement } from '../../util/util';
 @Component({
 	selector: 'app-repo-details',
@@ -24,6 +25,8 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	@ViewChild('overTooltip')
 	private overTooltip!: ElementRef;
 
+	public insideNode: boolean = false;
+
 	@HostListener('document:mousemove', ['$event'])
 	onMouseMove(e: any) {
 		this.mouseX = e.pageX;
@@ -40,6 +43,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	public repo: any;
 	public contributions!: Array<IPieChartContributionsVM>;
 	public loading: boolean = false;
+	public tooltip!: ITooltipNode;
 
 	private colors = Array<string>();
 	private labelsPre: any = [];
@@ -47,7 +51,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	private insertedLines: any = [];
 	private removedLines: any = [];
 
-	constructor(private dataService: DisplayDashboardService, private chartService: ChartService) {
+	constructor(private dataService: DisplayDashboardService, private chartService: ChartService, private repoService: RepoService) {
 		this.loading = true;
 	}
 
@@ -114,10 +118,10 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	getContributorsForCharts(reponame: string) {
 		this.chartService.getContributorsForPieChart(reponame)
-			.then((result) => {
+			.then((contributions: Array<IPieChartContributionsVM>) => {
 				this.loading = false;
-				this.contributions = result.contributionsVM as Array<IPieChartContributionsVM>;
-				this.contributions.map((contrib: IPieChartContributionsVM) => {
+				this.contributions = contributions;
+				contributions.forEach((contrib: IPieChartContributionsVM) => {
 					this.dataPre.push(contrib.modifications.c);
 					this.insertedLines.push(contrib.modifications.a);
 					this.removedLines.push(contrib.modifications.d);
@@ -160,7 +164,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.outNode();
 		});
 		s.bind('overNode', (e: any) => {
-			this.inNode();
+			this.inNode(e);
 			this.moveTooltipToMousePosition();
 		});
 		// draw
@@ -198,13 +202,41 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 	}
 
-	private inNode() {
-		removeClassFromElement(this.overTooltip, 'hide-tooltip');
-		addClassToElement(this.overTooltip, 'show-tooltip');
+	private inNode(event: any) {
+		// removeClassFromElement(this.overTooltip, 'hide-tooltip');
+		// addClassToElement(this.overTooltip, 'show-tooltip');
+		const sha = event.data.node.id;
+		const reponame = this.repo.full_name;
+		this.insideNode = true;
+		this.getCommitOfRepo(reponame, sha);
 	}
 
 	private outNode() {
+		this.insideNode = false;
 		removeClassFromElement(this.overTooltip, 'show-tooltip');
 		addClassToElement(this.overTooltip, 'hide-tooltip');
+	}
+
+	private getCommitOfRepo(reponame: string, commitSha: string) {
+		this.repoService.getCommitOfRepo(reponame, commitSha)
+			.then((commit: any) => {
+				console.log(commit)
+				this.tooltip = {
+					sha: commit.sha,
+					message: '',
+					date: '',
+					committer: '',
+				}
+			})
+			.then(() => {
+				if (this.insideNode === true) {
+					removeClassFromElement(this.overTooltip, 'hide-tooltip');
+					addClassToElement(this.overTooltip, 'show-tooltip');
+				}
+			})
+			.catch((err: Error) => {
+				removeClassFromElement(this.overTooltip, 'show-tooltip');
+				addClassToElement(this.overTooltip, 'hide-tooltip');
+			});
 	}
 }

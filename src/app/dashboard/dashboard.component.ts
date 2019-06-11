@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DisplayDashboardService } from '../services/DisplayEvents/display-data.service';
-
 @Component({
 	selector: 'app-dashboard',
 	templateUrl: './dashboard.component.html',
@@ -22,6 +21,7 @@ export class DashboardComponent implements OnInit {
 	}
 
 	ngOnInit() {
+
 		this.dataService.content.subscribe((content) => {
 			if (content === DisplayDashboardService.repoList.toString()) {
 				this.showRepos = true;

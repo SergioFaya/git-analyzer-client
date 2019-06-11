@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { IUserData } from 'git-analyzer-types';
 import * as socketIo from 'socket.io-client';
 import { environment } from '../environments/environment';
 import { Keys } from './models/Keys';
@@ -76,9 +77,9 @@ export class AppComponent implements OnInit {
 		localStorage.setItem(Keys.LOGGED, Keys.LOGGED);
 		this.dataService.loggedUser(true);
 		this.authService.getUserInfo()
-			.then((result: any) => {
-				localStorage.setItem(Keys.USER_DATA, JSON.stringify(result.userData));
-				this.dataService.imageUrlContent(result.userData.imageUrl!);
+			.then((userData: IUserData) => {
+				localStorage.setItem(Keys.USER_DATA, JSON.stringify(userData));
+				this.dataService.imageUrlContent(userData.imageUrl!);
 			})
 			.catch((err: Error) => console.log(err));
 	}

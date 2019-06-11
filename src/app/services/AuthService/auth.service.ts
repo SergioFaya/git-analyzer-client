@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { environment } from '../../../environments/environment';
-import { getTokensFromStorage } from 'src/app/util/util';
 import { Keys } from 'src/app/models/Keys';
+import { getTokensFromStorage } from 'src/app/util/util';
+import { environment } from '../../../environments/environment';
 
 
 @Injectable({
@@ -36,9 +36,8 @@ export class AuthService {
 		return this.http.get(this.AUTH_SERVICE_URL + this.LOGIN_ADDRESS, httpOptions).toPromise();
 	}
 
-	// TODO: llamarla para pillar la foto y la info básica
 	getUserInfo(): Promise<any> {
-		const {accessToken,githubToken} = getTokensFromStorage();
+		const { accessToken, githubToken } = getTokensFromStorage();
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
