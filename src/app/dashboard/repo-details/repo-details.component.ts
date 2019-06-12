@@ -151,7 +151,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	/**
 	 * Represents the git network graph and binds the necessary events
-	 * @param result 
+	 * @param result
 	 */
 	displayNetworkChart(result: any) {
 		// adapts the canvas size to the size of the chart to fit inside the scroller
@@ -177,10 +177,10 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	/**
-	 * Builds a new graph based on domType canvas, WebGL or SVG and the arrowType 
+	 * Builds a new graph based on domType canvas, WebGL or SVG and the arrowType
 	 * https://github.com/jacomyal/sigma.js/wiki
-	 * @param domType 
-	 * @param arrowType 
+	 * @param domType
+	 * @param arrowType
 	 */
 	private newSigmaGraph(domType: string, arrowType: string) {
 		return new Sigma({
@@ -195,7 +195,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 				batchEdgesDrawing: true,
 				minEdgeSize: 0.5,
 				maxEdgeSize: 4,
-				// hacer tamaño dependiente del tamaño del grafoo¡,
+				//TODO: hacer tamaño dependiente del tamaño del grafoo
 				minNodeSize: 1,
 				maxNodeSize: 8
 			}
@@ -203,8 +203,6 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	private inNode(event: any) {
-		// removeClassFromElement(this.overTooltip, 'hide-tooltip');
-		// addClassToElement(this.overTooltip, 'show-tooltip');
 		const sha = event.data.node.id;
 		const reponame = this.repo.full_name;
 		this.insideNode = true;
@@ -213,16 +211,15 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	private outNode() {
 		this.insideNode = false;
-		removeClassFromElement(this.overTooltip, 'show-tooltip');
-		addClassToElement(this.overTooltip, 'hide-tooltip');
+		this.hideTooltip();
 	}
 
 	private getCommitOfRepo(reponame: string, commitSha: string) {
 		this.repoService.getCommitOfRepo(reponame, commitSha)
 			.then((commit: any) => {
-				console.log(commit)
+				console.log(commit.result)
 				this.tooltip = {
-					sha: commit.sha,
+					sha: commit.result.sha,
 					message: '',
 					date: '',
 					committer: '',
@@ -230,13 +227,21 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 			})
 			.then(() => {
 				if (this.insideNode === true) {
-					removeClassFromElement(this.overTooltip, 'hide-tooltip');
-					addClassToElement(this.overTooltip, 'show-tooltip');
+					this.showTooltip();
 				}
 			})
 			.catch((err: Error) => {
-				removeClassFromElement(this.overTooltip, 'show-tooltip');
-				addClassToElement(this.overTooltip, 'hide-tooltip');
+				this.hideTooltip();
 			});
+	}
+
+	private hideTooltip() {
+		removeClassFromElement(this.overTooltip, 'show-tooltip');
+		addClassToElement(this.overTooltip, 'hide-tooltip');
+	}
+
+	private showTooltip() {
+		removeClassFromElement(this.overTooltip, 'hide-tooltip');
+		addClassToElement(this.overTooltip, 'show-tooltip');
 	}
 }

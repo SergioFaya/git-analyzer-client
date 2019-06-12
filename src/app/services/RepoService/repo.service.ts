@@ -112,6 +112,7 @@ export class RepoService {
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
 		};
+		console.log(githubToken);
 		return this.http.get(this.SERVER_SERVICE_URL + this.COMMITS, httpOptions).toPromise();
 	}
 }
