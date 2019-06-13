@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { IDecoratedCommit } from 'git-analyzer-types';
 import { getTokensFromStorage, getUserDataFromLocalStorage } from 'src/app/util/util';
 import { environment } from '../../../environments/environment';
 
@@ -112,6 +113,6 @@ export class RepoService {
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
 		};
-		return this.http.get(this.SERVER_SERVICE_URL + this.COMMITS, httpOptions).toPromise();
+		return this.http.get<IDecoratedCommit>(this.SERVER_SERVICE_URL + this.COMMITS, httpOptions).toPromise();
 	}
 }

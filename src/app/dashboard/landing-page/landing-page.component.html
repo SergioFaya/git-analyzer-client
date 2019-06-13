@@ -12,8 +12,13 @@
 			<div class="uk-container">
 				<div *ngFor="let issue of issues;">
 					<div class="uk-card uk-card-default">
-						<div class="uk-card-body uk-padding-small">
-							<h5 class="h-five-small-margin">{{issue.timestamp}} <span class="uk-badge">new</span></h5>
+						<div class="uk-card-body uk-padding-small uk-margin-small-bottom styled-card">
+							<h5 class="h-five-small-margin"> Title: {{issue.issue.title}} | Repo:
+								{{issue.repo.full_name}} | Creator:
+								{{issue.issue.user.login}} |
+								Date: {{getDateFromTimestamp(issue.timestamp)}} <span> <a
+										href="{{issue.issue.html_url}}">View</a></span></h5>
+							<!--<span class="uk-badge">new</span> -->
 						</div>
 					</div>
 				</div>

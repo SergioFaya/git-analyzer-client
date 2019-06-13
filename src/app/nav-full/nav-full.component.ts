@@ -25,7 +25,6 @@ export class NavFullComponent implements OnInit {
 		});
 		this.asignImageUrl()
 		this.dataService.image.subscribe(() => {
-			//this.imageUrl = localStorage.getItem('avatarUrl') as string;
 			this.asignImageUrl();
 		});
 	}
@@ -47,6 +46,9 @@ export class NavFullComponent implements OnInit {
 		this.dataService.showDashboard(DisplayDashboardService.codeReview);
 	}
 
+	displayLanding() {
+		this.dataService.showDashboard(DisplayDashboardService.landing);
+	}
 }
 
 

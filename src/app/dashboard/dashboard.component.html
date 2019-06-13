@@ -1,5 +1,5 @@
-<div class="uk-container">
-	<app-landing-page></app-landing-page>
+<div class="uk-container uk-padding-small">
+	<app-landing-page *ngIf="showLanding"></app-landing-page>
 	<app-list-repos-user *ngIf="showRepos"></app-list-repos-user>
 	<app-repo-details *ngIf="showDetailedRepo"></app-repo-details>
 	<app-list-owned-orgs *ngIf="showOrgs"></app-list-owned-orgs>

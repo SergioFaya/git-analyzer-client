@@ -12,12 +12,14 @@ export class DashboardComponent implements OnInit {
 	public showDetailedRepo: boolean;
 	public showOrgs: boolean;
 	public showCodeReview: boolean;
+	public showLanding: boolean;
 
 	constructor(private dataService: DisplayDashboardService) {
 		this.showRepos = false;
 		this.showDetailedRepo = false;
 		this.showOrgs = false;
 		this.showCodeReview = false;
+		this.showLanding = false;
 	}
 
 	ngOnInit() {
@@ -28,21 +30,31 @@ export class DashboardComponent implements OnInit {
 				this.showDetailedRepo = false;
 				this.showOrgs = false;
 				this.showCodeReview = false;
+				this.showLanding = false;
 			} else if (content === DisplayDashboardService.repoDetailed.toString()) {
 				this.showRepos = false;
 				this.showDetailedRepo = true;
 				this.showOrgs = false;
 				this.showCodeReview = false;
+				this.showLanding = false;
 			} else if (content === DisplayDashboardService.orgsList.toString()) {
 				this.showRepos = false;
 				this.showDetailedRepo = false;
 				this.showOrgs = true;
 				this.showCodeReview = false;
+				this.showLanding = false;
 			} else if (content === DisplayDashboardService.codeReview.toString()) {
 				this.showRepos = false;
 				this.showDetailedRepo = false;
 				this.showOrgs = false;
 				this.showCodeReview = true;
+				this.showLanding = false;
+			} else if (content === DisplayDashboardService.landing.toString()) {
+				this.showRepos = false;
+				this.showDetailedRepo = false;
+				this.showOrgs = false;
+				this.showCodeReview = false;
+				this.showLanding = true;
 			}
 		});
 	}

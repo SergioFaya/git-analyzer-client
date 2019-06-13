@@ -45,6 +45,7 @@ export class AppComponent implements OnInit {
 		this.dataService.logged.subscribe((logged) => {
 			this.logged = localStorage.getItem(Keys.LOGGED) == Keys.LOGGED;
 		});
+		this.dataService.showDashboard(DisplayDashboardService.landing);
 	}
 
 	get logoutFunc() {

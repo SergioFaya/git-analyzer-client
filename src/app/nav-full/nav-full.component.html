@@ -1,8 +1,12 @@
 <div id="nav-greater-960">
 	<nav class="uk-navbar-container uk-light" uk-navbar style="background-color: #191919;">
-		<div class="uk-navbar-left">
+		<div *ngIf="logged" class="uk-navbar-left">
 			<ul class="uk-navbar-nav">
 				<!-- REPOS -->
+				<li class="uk-margin-left">
+
+					<i class=" fas fa-home fa-2x" (click)="displayLanding()"></i>
+				</li>
 				<li class="uk-margin-left">
 					<button class="uk-button uk-button-secondary" (click)="displayRepoList()">List Repositories</button>
 				</li>

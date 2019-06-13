@@ -5,6 +5,22 @@
 <app-nav-full [logout]="logoutFunc" [loginUrl]="loginUrl" *ngIf="showFull"></app-nav-full>
 <app-dashboard *ngIf="logged"></app-dashboard>
 
+
 <div *ngIf="!logged">
-	<h1>Please Log in</h1>
+	<div class="uk-container">
+		<h1 class="uk-heading-bullet uk-heading-divider">Welcome</h1>
+
+		<p>With this app you can evaluate the contributions under your different repos hosted on github in a quick and
+			easy way. Some of the features are:</p>
+
+		<ul class="uk-list uk-list-bullet">
+			<li>To see number of additions and deletions over the week</li>
+			<li>To see the git network chart</li>
+			<li>Display recent activity of issues, pull requests</li>
+		</ul>
+
+	</div>
+
+
+
 </div>

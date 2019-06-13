@@ -28,6 +28,7 @@ export class DisplayDashboardService {
 	public static repoDetailed = 'repoDetailed';
 	public static orgsList = 'orgsList';
 	public static codeReview = 'codeReview';
+	public static landing = 'landing';
 
 	constructor() { }
 

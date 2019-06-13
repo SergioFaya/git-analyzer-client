@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import { IPieChartContributionsVM, ITooltipNode } from 'git-analyzer-types';
+import { IDecoratedCommit, IPieChartContributionsVM, ITooltipNode } from 'git-analyzer-types';
 // @ts-ignore
 import { sigma as Sigma } from 'sigma';
 import { ChartService } from '../../services/ChartService/chart.service';
@@ -43,7 +43,7 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	public repo: any;
 	public contributions!: Array<IPieChartContributionsVM>;
 	public loading: boolean = false;
-	public tooltip!: ITooltipNode;
+	public tooltip: ITooltipNode;
 
 	private colors = Array<string>();
 	private labelsPre: any = [];
@@ -53,6 +53,13 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	constructor(private dataService: DisplayDashboardService, private chartService: ChartService, private repoService: RepoService) {
 		this.loading = true;
+		this.tooltip = {
+			sha: "",
+			message: "",
+			date: "",
+			committer: "",
+			url: ""
+		}
 	}
 
 	// Somewhere under the class constructor we want to wait for our view
@@ -203,8 +210,6 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 	}
 
 	private inNode(event: any) {
-		// removeClassFromElement(this.overTooltip, 'hide-tooltip');
-		// addClassToElement(this.overTooltip, 'show-tooltip');
 		const sha = event.data.node.id;
 		const reponame = this.repo.full_name;
 		this.insideNode = true;
@@ -213,19 +218,21 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 
 	private outNode() {
 		this.insideNode = false;
-		removeClassFromElement(this.overTooltip, 'show-tooltip');
-		addClassToElement(this.overTooltip, 'hide-tooltip');
+		setTimeout(() => {
+			removeClassFromElement(this.overTooltip, 'show-tooltip');
+			addClassToElement(this.overTooltip, 'hide-tooltip');
+		}, 3000);
 	}
 
 	private getCommitOfRepo(reponame: string, commitSha: string) {
 		this.repoService.getCommitOfRepo(reponame, commitSha)
-			.then((commit: any) => {
-				console.log(commit)
+			.then((commit: IDecoratedCommit) => {
 				this.tooltip = {
 					sha: commit.sha,
-					message: '',
-					date: '',
-					committer: '',
+					message: commit.commit.message,
+					date: commit.commit.committer.date,
+					committer: commit.author.login!,
+					url: commit.html_url
 				}
 			})
 			.then(() => {
