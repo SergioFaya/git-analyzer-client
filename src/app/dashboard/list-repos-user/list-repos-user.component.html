@@ -1,55 +1,163 @@
 <div class="uk-container-large">
 	<div class="uk-grid">
 		<div class="uk-width-1-2">
-			<h3>List of repos <span>&nbsp;<i *ngIf="loading" class="fas fa-spinner fa-pulse"></i>
+			<h2>List of repos <span>&nbsp;<i *ngIf="loading" class="fas fa-spinner fa-pulse"></i>
 				</span>
-			</h3>
+			</h2>
 		</div>
 		<div class="uk-width-1-2">
-			<div class="uk-align-right uk-text-small">
-				<form class="uk-search uk-search-default uk-text-bold uk-box-shadow-medium">
-					<span uk-search-icon></span>
-					<input (keydown)="searchKeyDown($event)" (keyup)="searchKeyUp($event)" [(ngModel)]="searchText"
-						class="uk-search-input search-box" type="search" placeholder="Search..." name="searchText" />
+			<div class="uk-grid-small" uk-grid>
+				<div class="uk-form-controls">
+					<label class="uk-form-label" for="form-stacked-select">Paging </label>
+					<select (change)="selectEvent()" [(ngModel)]="per_page" class="uk-select uk-form-width-xsmall"
+						id="form-stacked-select">
+						<option>5</option>
+						<option>10</option>
+						<option>50</option>
+						<option>100</option>
+					</select>
+				</div>
+
+				<form>
+					<div class="uk-search uk-search-default">
+						<span uk-search-icon></span>
+						<input (keydown)="searchKeyDown($event)" (keyup)="searchKeyUp($event)" [(ngModel)]="searchText"
+							class="uk-search-input search-box" type="search" placeholder="Search..."
+							name="searchText" />
+					</div>
+
 				</form>
+
 				<button (click)="getUserReposBySearch()"
-					class="uk-button uk-button-default uk-button-primary uk-margin-small-left uk-box-shadow-medium">All</button>
-				<!--
-						<label for="form-horizontal-select" class="uk-text-small">
-							Paging:&nbsp;
-						</label>
-		
-						<select class="uk-select uk-form-width-xsmall" id="form-horizontal-select">
-							<option (click)="setPerPage(5)">5</option>
-							<option (click)="setPerPage(10)">10</option>
-							<option (click)="setPerPage(50)">50</option>
-						</select>
-						-->
+					class="uk-button uk-button-default uk-button-primary uk-margin-small-left">Show
+					All</button>
+
 			</div>
 		</div>
+	</div>
+
+	<div *ngIf="repos.length === 0">
+		No Repos to show
 	</div>
 
 	<div *ngFor="let repo of repos;">
 		<div class="uk-card uk-card-default uk-margin-top">
 			<div class="uk-card-body uk-padding-small">
-				<h5 class="h-five-small-margin">{{repo.full_name}}</h5>
+				<h4 class="h-five-small-margin">{{repo.name}} <span class="uk-align-right">{{repo.owner.login}} <img
+							src="{{repo.owner.avatar_url}}" alt="owner_img" class="uk-icon-button" /> </span></h4>
+
+				<div class="uk-overflow-auto uk-margin-small-bottom">
+					<table class="uk-table uk-table-middle uk-table-divider">
+						<thead>
+							<tr>
+								<th *ngIf="repo.description"
+									class="uk-table-expand uk-padding-remove-top uk-padding-remove-bottom bold-th">
+									Description</th>
+								<th *ngIf="repo.language"
+									class="uk-table-expand uk-padding-remove-top uk-padding-remove-bottom bold-th">
+									Main Language
+								</th>
+								<th *ngIf="repo.created_at"
+									class="uk-table-expand uk-padding-remove-top uk-padding-remove-bottom bold-th">
+									Created Date</th>
+								<th *ngIf="repo.updated_at"
+									class="uk-table-expand uk-padding-remove-top uk-padding-remove-bottom bold-th">
+									Updated Date</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td *ngIf="repo.description" class="uk-padding-remove-top uk-padding-remove-bottom">
+									{{repo.description}}</td>
+								<td *ngIf="repo.language" class="uk-padding-remove-top uk-padding-remove-bottom">
+									{{repo.language}}</td>
+								<td *ngIf="repo.created_at" class="uk-padding-remove-top uk-padding-remove-bottom">
+									{{repo.created_at}}</td>
+								<td *ngIf="repo.updated_at" class="uk-padding-remove-top uk-padding-remove-bottom">
+									{{repo.updated_at}}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
 
 				<button (click)='getUserRepoByName(repo.full_name)'
-					class="uk-button uk-button-secondary uk-margin-right">See
+					class="uk-button uk-button-secondary uk-width-medium">See
 					detailed</button>
-				<a class="uk-button uk-button-primary" [href]="repo.html_url">See on github</a>
 
-
+				<a class="uk-button uk-button-primary uk-width-medium" [href]="repo.html_url">See on github</a>
+				<a (click)="reviewRepo(repo)" class="uk-button uk-button-secondary uk-align-right"
+					href="#modal-create-review" uk-toggle> New Review</a>
 			</div>
 		</div>
 	</div>
 
 	<div class="uk-card uk-card-default uk-padding-small uk-margin-top uk-margin-bottom">
 		<ul class="uk-pagination pagination-no-margin">
-			<li><a (click)="pageDown()"><span class="uk-margin-small-right" uk-pagination-previous></span>
+			<li class="uk-margin-auto-right"><a (click)="pageDown()"><span class="uk-margin-small-right"
+						uk-pagination-previous></span>
 					Previous</a></li>
+			<li class="uk-margin-auto-vertical uk-align-center"> Page: {{page}} - Showing {{repos.length}} repos</li>
 			<li class="uk-margin-auto-left"><a (click)="pageUp()">Next <span class="uk-margin-small-left"
 						uk-pagination-next></span></a></li>
 		</ul>
+	</div>
+</div>
+
+
+
+<!-- modal review -->
+<div id="modal-create-review" class="uk-modal-container custom-modal" uk-modal>
+	<div class="uk-modal-dialog uk-margin-auto-vertical">
+		<button (click)="clearForm()" id="closeModalId" class="uk-modal-close-default" uk-overflow-auto type="button"
+			uk-close></button>
+		<div class="uk-modal-header">
+			<h2 *ngIf="review.repository" class="uk-modal-title">New Review of {{review.repository.full_name}}</h2>
+		</div>
+		<form>
+
+			<div class="uk-modal-body">
+				<fieldset class="uk-fieldset">
+					<input [(ngModel)]="review.repository" id="repository" name="repository" type="hidden" />
+					<div class="uk-margin">
+						<label class="uk-form-label" for="title">Title*</label>
+						<input [(ngModel)]="review.title" id="title" name="title" class="uk-input" type="text"
+							placeholder="Title" required>
+					</div>
+
+					<div class="uk-margin">
+						<label class="uk-form-label" for="comment">Comments</label>
+						<textarea [(ngModel)]="review.commentary" id="comment" class="uk-textarea" name="commentary"
+							rows="5"></textarea>
+					</div>
+
+					<div class="uk-margin uk-grid-small uk-child-width-auto uk-grid">
+						<label><input [(ngModel)]="createIssue" class="uk-checkbox" type="checkbox" checked
+								name="createIssue"> Create
+							Issue</label>
+					</div>
+
+					<div class="uk-grid uk-margin">
+						<div class="uk-width-expand@m">
+							<input [(ngModel)]="review.calification" name="evaluationGrade"
+								class="uk-range uk-form-large" type="range" value="7" min="0" max="10" step="0.1"
+								required />
+						</div>
+						<div class="uk-grid-width-1-4">
+							<input id="title" class="uk-input uk-form-large" type="number"
+								[(ngModel)]="review.calification" name="evaluationGradeText" value="7" min="0" max="10"
+								step="0.1" required>
+						</div>
+					</div>
+
+				</fieldset>
+			</div>
+			<div class="uk-modal-footer uk-text-right">
+				<button (click)="clearForm()" class="uk-button uk-button-default uk-modal-close"
+					type="button">Cancel</button>
+				&nbsp;
+				<button (click)="createReview()" class="uk-button uk-button-primary" type="submit">Save</button>
+			</div>
+		</form>
+
 	</div>
 </div>

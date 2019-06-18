@@ -10,7 +10,7 @@
 	<div
 		class="uk-card uk-card-default uk-card-body uk-panel uk-panel-scrollable uk-height-max-large custom-scroll-panel uk-margin-top uk-margin-bottom">
 		<div #gitGraph></div>
-		<button class="uk-button" (click)="this.loadNetworkGraph();">Reload Network Chart</button>
+		<button class="uk-button uk-button-primary" (click)="this.loadNetworkGraph();">Reload Network Chart</button>
 	</div>
 	<!-- DATA TABLE -->
 	<div class="uk-card uk-card-default">
@@ -68,6 +68,10 @@
 					width="inherit" height="300px"></canvas></div>
 		</div>
 	</div>
+
+	<button (click)="this.getContributorsForCharts(this.repo.full_name!)" class="uk-button uk-button-primary">Reload
+		Contributors</button>
+
 </div>
 
 <!-- HIDDEN TOOLTIP -->

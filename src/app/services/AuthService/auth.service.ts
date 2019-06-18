@@ -1,6 +1,5 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Keys } from 'src/app/models/Keys';
 import { getTokensFromStorage } from 'src/app/util/util';
 import { environment } from '../../../environments/environment';
 
@@ -16,8 +15,21 @@ export class AuthService {
 	readonly LOGOUT_ADDRESS: string = '/logout';
 	readonly LOGIN_ADDRESS: string = '/login';
 	readonly USER_INFO: string = '/user/info';
+	readonly LOGIN_CHECK: string = '/login/check';
+
 
 	constructor(private http: HttpClient) { }
+
+	checkLogin() {
+		const { accessToken } = getTokensFromStorage();
+		const httpOptions = {
+			headers: new HttpHeaders({
+				'Content-Type': 'application/json',
+				'x-access-token': accessToken,
+			})
+		}
+		return this.http.get(this.AUTH_SERVICE_URL + this.LOGIN_CHECK, httpOptions).toPromise();
+	}
 
 	logOut() {
 		const httpOptions = {
@@ -25,7 +37,8 @@ export class AuthService {
 				'Content-Type': 'application/json',
 			})
 		}
-		const body = { 'x-access-token': localStorage.getItem(Keys.ACCESS_TOKEN) };
+		const { accessToken } = getTokensFromStorage();
+		const body = { 'x-access-token': accessToken };
 		return this.http.post(this.AUTH_SERVICE_URL + this.LOGOUT_ADDRESS, body, httpOptions).toPromise();
 	}
 

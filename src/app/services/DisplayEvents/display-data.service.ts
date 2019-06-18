@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { IRepo } from 'git-analyzer-types';
 import { BehaviorSubject } from 'rxjs';
 
 /**
@@ -14,7 +15,7 @@ export class DisplayDashboardService {
 	content = this.currentDashboardContent.asObservable();
 
 	// revisar - ta puesto rapido hecho una mierda
-	private repoDetailedContent = new BehaviorSubject('');
+	private repoDetailedContent = new BehaviorSubject<IRepo>({});
 	repo = this.repoDetailedContent.asObservable();
 
 	private isloggedUser = new BehaviorSubject(false);
@@ -30,6 +31,10 @@ export class DisplayDashboardService {
 	public static codeReview = 'codeReview';
 	public static landing = 'landing';
 
+	public static showLateral = undefined;
+	public static showFull = undefined;
+
+
 	constructor() { }
 
 	showDashboard(key: string) {
@@ -37,7 +42,7 @@ export class DisplayDashboardService {
 		localStorage.setItem('dashboard', key);
 	}
 
-	detailedRepo(repo: string) {
+	detailedRepo(repo: IRepo) {
 		this.repoDetailedContent.next(repo);
 		// localStorage.setItem('repoDetailed', repo);
 	}

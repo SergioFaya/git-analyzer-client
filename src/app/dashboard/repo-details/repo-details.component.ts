@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Chart } from 'chart.js';
-import { IDecoratedCommit, IPieChartContributionsVM, ITooltipNode } from 'git-analyzer-types';
+import { IDecoratedCommit, IPieChartContributionsVM, IRepo, ITooltipNode } from 'git-analyzer-types';
 // @ts-ignore
 import { sigma as Sigma } from 'sigma';
 import { ChartService } from '../../services/ChartService/chart.service';
@@ -60,12 +60,16 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 			committer: "",
 			url: ""
 		}
+		this.dataService.repo.subscribe((repo: IRepo) => {
+			this.repo = repo;
+		});
 	}
 
 	// Somewhere under the class constructor we want to wait for our view
 	// to initialize
 	ngAfterViewInit() {
 		this.loadNetworkGraph();
+		this.getContributorsForCharts(this.repo.full_name!);
 	}
 
 	loadNetworkGraph() {
@@ -80,16 +84,10 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 			this.colors.push(generateRandomColor());
 			i++;
 		}
-		this.dataService.repo.subscribe((repo) => {
-			this.repo = repo;
-			this.getContributorsForCharts(this.repo.full_name);
-		});
 	}
 
 	ngOnDestroy(): void {
-		this.chartCommits.destroy();
-		this.chartAddedLines.destroy();
-		this.chartRemovedLines.destroy();
+		this.removeCharts();
 	}
 
 	/**
@@ -123,11 +121,33 @@ export class RepoDetailsComponent implements OnInit, AfterViewInit, OnDestroy {
 		});
 	}
 
+	removeCharts() {
+		if (this.chartCommits) {
+			this.chartCommits.destroy();
+		}
+		if (this.chartAddedLines) {
+			this.chartAddedLines.destroy();
+		}
+		if (this.chartRemovedLines) {
+			this.chartRemovedLines.destroy();
+		}
+	}
+
+	clearChartData() {
+		this.dataPre = [];
+		this.insertedLines = [];
+		this.removedLines = [];
+		this.labelsPre = [];
+	}
+
 	getContributorsForCharts(reponame: string) {
+		this.removeCharts();
+		this.clearChartData();
 		this.chartService.getContributorsForPieChart(reponame)
 			.then((contributions: Array<IPieChartContributionsVM>) => {
 				this.loading = false;
 				this.contributions = contributions;
+
 				contributions.forEach((contrib: IPieChartContributionsVM) => {
 					this.dataPre.push(contrib.modifications.c);
 					this.insertedLines.push(contrib.modifications.a);

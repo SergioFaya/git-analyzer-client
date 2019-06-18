@@ -1,6 +1,6 @@
-import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { ICodeReview } from 'git-analyzer-types';
+import { ICodeReview, IRepo } from 'git-analyzer-types';
 import { getTokensFromStorage, getUserDataFromLocalStorage } from 'src/app/util/util';
 import { environment } from '../../../environments/environment';
 
@@ -14,41 +14,75 @@ export class CodeReviewService {
 	readonly SERVER_SERVICE_URL = environment.serverUrl;
 
 	readonly FIND_ALL = '/codeReview/list';
-	readonly CREATE = 'findAll';
-	readonly UPDATE = 'findAll';
-	readonly DELETE = 'findAll';
+	readonly SEARCH = '/codeReview/list/search';
+
+	readonly CREATE = '/codeReview/create';
+	readonly DELETE = '/codeReview/delete';
 
 
 	constructor(private http: HttpClient) { }
 
 	findAll() {
-		const { accessToken } = getTokensFromStorage()
+		const { accessToken } = getTokensFromStorage();
 		const username = getUserDataFromLocalStorage().login;
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
 			'username': username!
-			//'x-github-token': this.githubToken,
 		};
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
 		};
-		return this.http.get(this.SERVER_SERVICE_URL + this.FIND_ALL, httpOptions).toPromise();
+		return this.http.get<Array<ICodeReview>>(this.SERVER_SERVICE_URL + this.FIND_ALL, httpOptions).toPromise();
 	}
 
-	newCodeReview(review: ICodeReview) {
-		const { accessToken } = getTokensFromStorage()
+	search(search: string) {
+		const { accessToken } = getTokensFromStorage();
+		const username = getUserDataFromLocalStorage().login;
 		const headers = {
 			'Content-Type': 'application/json',
 			'x-access-token': accessToken,
+			'username': username!,
+			'search': search,
 		};
-		const params = new HttpParams();
-		params.append('review', review.toString())
 		const httpOptions = {
-			headers: new HttpHeaders(headers),
-			params: new HttpParams
+			headers: new HttpHeaders(headers)
 		};
-		// new codereview
-		return this.http.get(this.SERVER_SERVICE_URL, httpOptions).toPromise();
+		return this.http.get<Array<ICodeReview>>(this.SERVER_SERVICE_URL + this.SEARCH, httpOptions).toPromise();
+	}
+
+	newCodeReview(review: ICodeReview) {
+		const { accessToken } = getTokensFromStorage();
+
+		const params = {
+			'review': JSON.stringify(review),
+			'x-access-token': accessToken
+		}
+		return this.http.post(this.SERVER_SERVICE_URL + this.CREATE, params).toPromise();
+	}
+
+	deleteCodeReview(reviewId: ICodeReview) {
+		const { accessToken } = getTokensFromStorage();
+
+		const params = {
+			'reviewId': reviewId,
+			'x-access-token': accessToken
+		}
+		return this.http.post(this.SERVER_SERVICE_URL + this.DELETE, params).toPromise();
+	}
+
+
+	createIssueForCodeReview(review: ICodeReview) {
+		const { githubToken } = getTokensFromStorage();
+		const repo = review.repository as IRepo;
+		const body = {
+			'title': review.title,
+			'body': review.commentary,
+			'labels': ['Review Calification ' + review.calification]
+		}
+		const headers = {
+			'Authorization': 'token ' + githubToken
+		};
+		return this.http.post(`https://api.github.com/repos/${repo.full_name}/issues`, body, { headers: headers }).toPromise();
 	}
 }

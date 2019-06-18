@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { IRepo } from 'git-analyzer-types';
+import { ICodeReview, Iissue, IRepo } from 'git-analyzer-types';
+import { CodeReviewService } from '../../services/CodeReviewService/code-review.service';
 import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
 import { RepoService } from '../../services/RepoService/repo.service';
-import { notify } from '../../util/util';
+import { getUserDataFromLocalStorage, notify } from '../../util/util';
 @Component({
 	selector: 'app-list-repos-user',
 	templateUrl: './list-repos-user.component.html',
@@ -11,24 +12,24 @@ import { notify } from '../../util/util';
 export class ListReposUserComponent implements OnInit {
 
 	public repos!: Array<IRepo>;
-	repoDetailed: any;
+	public repoDetailed: any;
 	public per_page = 5;
 	public page = 1;
-	loading = false;
+	public loading = false;
 	public searchText!: string;
-	//'<svg width="155" height="30"> <defs> <linearGradient id="gradient-157445042" x1="0" x2="0" y1="1" y2="0"> <stop offset="10%" stop-color="#c6e48b"></stop> <stop offset="33%" stop-color="#7bc96f"></stop> <stop offset="66%" stop-color="#239a3b"></stop> <stop offset="90%" stop-color="#196127"></stop> </linearGradient> <mask id="sparkline-157445042" x="0" y="0" width="155" height="28"> <polyline transform="translate(0, 28) scale(1,-1)" points="0,1 3,1 6,1 9,1 12,1 15,1 18,1 21,1 24,1 27,1 30,1 33,1 36,1 39,1 42,1 45,1 48,1 51,1 54,1 57,1 60,1 63,1 66,2 69,4 72,2 75,1 78,1 81,1 84,1 87,1 90,1 93,1 96,1 99,1 102,2 105,6 108,2 111,1 114,1 117,7 120,2 123,4 126,7 129,4 132,1 135,1 138,2 141,1 144,2 147,2 150,2 153,4 " fill="transparent" stroke="#8cc665" stroke-width="2"> </polyline></mask> </defs> <g transform="translate(0, -9)"> <rect x="0" y="-2" width="155" height="30" style="stroke: none; fill: url(#gradient-157445042); mask: url(#sparkline-157445042)"></rect> </g> </svg>';
 
-	// search keyup keydown control 
 	private typingTimer: any;
 	private doneTypingInterval = 2000;
 
-	constructor(
-		private dataService: DisplayDashboardService,
-		private repoService: RepoService) { }
+	public review: ICodeReview = {};
+	public createIssue: boolean = false;
+
+	constructor(private dataService: DisplayDashboardService, private repoService: RepoService, private codeReviewService: CodeReviewService) { }
 
 	ngOnInit() {
 		this.loading = true;
 		this.getUserRepos(this.page, this.per_page);
+		this.clearForm();
 	}
 
 	getUserReposBySearch(search: string) {
@@ -68,8 +69,6 @@ export class ListReposUserComponent implements OnInit {
 			});
 	}
 
-	// utilities
-
 	// on keyup start the countdown 
 	searchKeyUp(_event: any) {
 		clearTimeout(this.typingTimer);
@@ -97,5 +96,61 @@ export class ListReposUserComponent implements OnInit {
 			this.page--;
 			this.getUserRepos(this.page, this.per_page);
 		}
+	}
+
+	selectEvent() {
+		this.getUserRepos(this.page, this.per_page);
+	}
+
+	reviewRepo(repo: any) {
+		this.review.repository = repo;
+	}
+
+	closeModal() {
+		var element: HTMLElement = document.getElementById('closeModalId') as HTMLElement;
+		element.click();
+	}
+
+	createReview() {
+		if (this.validateCodeReview()) {
+			this.codeReviewService
+				.newCodeReview(this.review)
+				.then(() => {
+					notify("Review created successfully");
+					this.clearForm();
+				}).catch(() => {
+					this.clearForm();
+				});
+			this.closeModal();
+		} else {
+			notify("Invalid form data, title and evaluation is required")
+		}
+
+		if (this.createIssue === true) {
+			this.codeReviewService
+				.createIssueForCodeReview(this.review)
+				.then((issue: Iissue) => {
+					notify('<a class="uk-button" href="' + issue.html_url + '">Issue created</a>');
+				}).catch(() => {
+					notify('The associated issue could not be created please do it manually');
+				});
+		}
+	}
+
+
+	validateCodeReview(): boolean {
+		if (this.review.title && this.review.title.length > 0 && this.review.calification) {
+			const userData = getUserDataFromLocalStorage();
+			this.review.created_by = userData;
+			return true;
+		}
+		return false;
+	}
+
+	clearForm() {
+		this.createIssue = false;
+		this.review = {} as ICodeReview;
+		this.review.calification = 7;
+
 	}
 }
