@@ -4,7 +4,7 @@ import { ICodeReview } from 'git-analyzer-types';
 import * as UIkit from 'uikit';
 import { CodeReviewService } from '../../services/CodeReviewService/code-review.service';
 import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
-import { notify } from '../../util/util';
+import { notify, getDateFromTimestamp } from '../../util/util';
 @Component({
 	selector: 'app-code-review',
 	templateUrl: './code-review.component.html',
@@ -56,5 +56,9 @@ export class CodeReviewComponent implements OnInit {
 			}).catch(() => {
 				notify('Could not delete try again later');
 			});
+	}
+
+	parseDate(timestamp: number){
+		return getDateFromTimestamp(timestamp);
 	}
 }

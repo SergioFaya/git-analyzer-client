@@ -1,7 +1,5 @@
 <div class="uk-container-large">
-	<!--
-	header 
--->
+	<!--header -->
 	<div class="uk-grid">
 		<div class="uk-width-1-2">
 			<h3>Code Reviews <span>&nbsp;<i *ngIf="loading" class="fas fa-spinner fa-pulse"></i>
@@ -10,6 +8,7 @@
 		</div>
 		<div class="uk-width-1-2">
 			<div class="uk-align-right uk-text-small">
+		<!-- search -->
 				<form class="uk-search uk-search-default uk-text-bold uk-box-shadow-medium">
 					<span uk-search-icon></span>
 					<input (keydown)="searchKeyDown($event)" (keyup)="searchKeyUp($event)" [(ngModel)]="searchText"
@@ -18,9 +17,6 @@
 			</div>
 		</div>
 	</div>
-	<!--
-search	
--->
 	<div *ngIf="reviews.length === 0">
 		No Reviews to show
 	</div>
@@ -28,17 +24,14 @@ search
 	<div *ngFor="let review of reviews;">
 		<div class="uk-card uk-card-default uk-margin-top">
 			<div class="uk-card-body uk-padding-small">
-				<h5 class="h-five-small-margin">{{review.id}}</h5>
-
-				<button (click)="deleteReview(review)"
-					class="uk-button uk-button-danger uk-width-small uk-align-right">Delete</button>
+					<h4 class="h-five-small-margin">{{review.title}} <span class="uk-align-right">{{parseDate(review.created_at)}}</span></h4>
+					<textarea disabled class="uk-textarea" placeholder="no comments">{{review.commentary}}</textarea>
+					<i class="uk-text-small">Review performed over repository: {{review.repository.name}} with calificaction of {{review.calification}}</i>
+				<button (click)="deleteReviewClick(review)"
+					class="uk-button uk-button-danger uk-width-small uk-align-right uk-margin-small-top">Delete</button>
 			</div>
 		</div>
 	</div>
 
 
 </div>
-
-
-<!-- CONFIRM MODAL -->
-<a id="js-modal-confirm" class="uk-button uk-button-default" href="#">Confirm</a>
