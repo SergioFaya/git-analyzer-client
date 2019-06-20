@@ -110,8 +110,7 @@
 								<div>
 									Date
 									<hr class="uk-margin-remove">
-									<span
-										class="uk-margin-small-left uk-text-small">{{getDateFromTimestamp(pr.timestamp)}}</span>
+									<span class="uk-margin-small-left uk-text-small">{{parseDate(pr.timestamp)}}</span>
 								</div>
 								<div>
 									<span *ngIf="!pr.action" class="uk-badge uk-width-expand">General</span>
@@ -165,7 +164,7 @@
 									Date
 									<hr class="uk-margin-remove">
 									<span
-										class="uk-margin-small-left uk-text-small">{{getDateFromTimestamp(commit.timestamp)}}</span>
+										class="uk-margin-small-left uk-text-small">{{parseDate(commit.timestamp)}}</span>
 								</div>
 								<div>
 									<a href="{{commit.head_commit.url}}">View in github</a>

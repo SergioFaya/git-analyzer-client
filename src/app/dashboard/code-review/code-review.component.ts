@@ -4,7 +4,7 @@ import { ICodeReview } from 'git-analyzer-types';
 import * as UIkit from 'uikit';
 import { CodeReviewService } from '../../services/CodeReviewService/code-review.service';
 import { DisplayDashboardService } from '../../services/DisplayEvents/display-data.service';
-import { notify, getDateFromTimestamp } from '../../util/util';
+import { getDateFromTimestamp, notify } from '../../util/util';
 @Component({
 	selector: 'app-code-review',
 	templateUrl: './code-review.component.html',
@@ -16,6 +16,11 @@ export class CodeReviewComponent implements OnInit {
 	public reviews: Array<ICodeReview> = [];
 
 	public review: ICodeReview = {};
+
+	private typingTimer: any;
+	private doneTypingInterval = 2000;
+	public searchText!: string;
+
 	constructor(private displayDashboardService: DisplayDashboardService, private codeReviewService: CodeReviewService) { }
 
 	ngOnInit() {
@@ -58,7 +63,38 @@ export class CodeReviewComponent implements OnInit {
 			});
 	}
 
-	parseDate(timestamp: number){
+	parseDate(timestamp: number) {
 		return getDateFromTimestamp(timestamp);
+	}
+
+	getReviewsBySearch(search: string) {
+		this.codeReviewService
+			.search(search)
+			.then((reviews: Array<ICodeReview>) => {
+				this.loading = false;
+				this.reviews = reviews;
+			}).catch((err) => {
+				console.log(err);
+				notify('Could not perform search');
+				this.loading = false;
+				this.getReviews();
+			});
+	}
+
+	// on keyup start the countdown 
+	searchKeyUp(_event: any) {
+		clearTimeout(this.typingTimer);
+		this.typingTimer = setTimeout(() => {
+			if (this.searchText.length > 3) {
+				this.loading = true;
+				this.getReviewsBySearch(this.searchText);
+				this.searchText = '';
+			}
+		}, this.doneTypingInterval);
+	}
+
+	// on keydown clear the countdown
+	searchKeyDown(_event: any) {
+		clearTimeout(this.typingTimer);
 	}
 }

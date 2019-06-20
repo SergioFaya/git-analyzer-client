@@ -8,7 +8,7 @@
 		</div>
 		<div class="uk-width-1-2">
 			<div class="uk-align-right uk-text-small">
-		<!-- search -->
+				<!-- search -->
 				<form class="uk-search uk-search-default uk-text-bold uk-box-shadow-medium">
 					<span uk-search-icon></span>
 					<input (keydown)="searchKeyDown($event)" (keyup)="searchKeyUp($event)" [(ngModel)]="searchText"
@@ -24,9 +24,11 @@
 	<div *ngFor="let review of reviews;">
 		<div class="uk-card uk-card-default uk-margin-top">
 			<div class="uk-card-body uk-padding-small">
-					<h4 class="h-five-small-margin">{{review.title}} <span class="uk-align-right">{{parseDate(review.created_at)}}</span></h4>
-					<textarea disabled class="uk-textarea" placeholder="no comments">{{review.commentary}}</textarea>
-					<i class="uk-text-small">Review performed over repository: {{review.repository.name}} with calificaction of {{review.calification}}</i>
+				<h4 class="h-five-small-margin">{{review.title}} <span
+						class="uk-align-right">{{parseDate(review.created_at)}}</span></h4>
+				<textarea disabled class="uk-textarea" placeholder="no comments">{{review.commentary}}</textarea>
+				<i class="uk-text-small">Review performed over repository: {{review.repository.name}} with calification
+					of {{review.calification}}</i>
 				<button (click)="deleteReviewClick(review)"
 					class="uk-button uk-button-danger uk-width-small uk-align-right uk-margin-small-top">Delete</button>
 			</div>

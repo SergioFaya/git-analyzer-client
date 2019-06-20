@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
+// @ts-ignore
+import * as UIkit from 'uikit';
 import { Keys } from '../models/Keys';
 import { DisplayDashboardService } from '../services/DisplayEvents/display-data.service';
 import { getUserDataFromLocalStorage } from '../util/util';
-
 @Component({
 	selector: 'app-nav-lateral',
 	templateUrl: './nav-lateral.component.html',
@@ -35,12 +36,23 @@ export class NavLateralComponent implements OnInit {
 		this.imageUrl = userData.imageUrl;
 	}
 
-	// dashboard content
-	changeDashboardContent(dashboardContent: string) {
-		this.dataService.showDashboard(dashboardContent);
+	displayRepoList() {
+		this.dataService.showDashboard(DisplayDashboardService.repoList);
+		UIkit.offcanvas(document.getElementById("offcanvas-nav")).hide();
 	}
 
-	displayRepoList() {
-		this.changeDashboardContent(DisplayDashboardService.repoList);
+	displayOrganizations() {
+		this.dataService.showDashboard(DisplayDashboardService.orgsList);
+		UIkit.offcanvas(document.getElementById("offcanvas-nav")).hide();
+	}
+
+	displayCodeReview() {
+		this.dataService.showDashboard(DisplayDashboardService.codeReview);
+		UIkit.offcanvas(document.getElementById("offcanvas-nav")).hide();
+	}
+
+	displayLanding() {
+		this.dataService.showDashboard(DisplayDashboardService.landing);
+		UIkit.offcanvas(document.getElementById("offcanvas-nav")).hide();
 	}
 }

@@ -4,7 +4,7 @@ import { ICommitWebhook, IissueWebHook, IPullReqWebHook } from 'git-analyzer-typ
 import GitHubCalendar from 'github-calendar';
 import { interval, Subscription } from 'rxjs';
 import { RecentActivityService } from '../../services/RecentActivity/recent-activity.service';
-import { getUserDataFromLocalStorage, getDateFromTimestamp } from '../../util/util';
+import { getDateFromTimestamp, getUserDataFromLocalStorage } from '../../util/util';
 @Component({
 	selector: 'app-landing-page',
 	templateUrl: './landing-page.component.html',
@@ -73,7 +73,7 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 
 	}
 
-	parseDate(timestamp: number){
+	parseDate(timestamp: number) {
 		return getDateFromTimestamp(timestamp);
 	}
 
@@ -86,4 +86,6 @@ export class LandingPageComponent implements OnInit, OnDestroy {
 		}
 		return false;
 	}
+
+
 }

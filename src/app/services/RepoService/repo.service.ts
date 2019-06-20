@@ -65,7 +65,7 @@ export class RepoService {
 		if (username) {
 			name = username;
 		} else {
-			name = localStorage.getItem('username') as string;
+			name = getUserDataFromLocalStorage().username as string;
 		}
 
 		const headers = {
@@ -73,12 +73,14 @@ export class RepoService {
 			'x-access-token': accessToken,
 			'x-github-token': githubToken
 		};
-		const params: HttpParams = new HttpParams({
+
+		const params = new HttpParams({
 			fromObject: {
-				name,
-				search
-			},
-		});
+				'username': name,
+				'search': search
+			}
+		})
+
 		const httpOptions = {
 			headers: new HttpHeaders(headers),
 			params,

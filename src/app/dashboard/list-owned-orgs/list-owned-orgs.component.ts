@@ -25,6 +25,8 @@ export class ListOwnedOrgsComponent implements OnInit {
 	public review: ICodeReview = {};
 	public createIssue: boolean = false;
 
+
+
 	constructor(private orgService: OrganizationService,
 		private dataService: DisplayDashboardService,
 		private repoService: RepoService,

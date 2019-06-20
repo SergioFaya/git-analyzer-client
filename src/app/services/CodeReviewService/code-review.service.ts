@@ -61,7 +61,7 @@ export class CodeReviewService {
 		return this.http.post(this.SERVER_SERVICE_URL + this.CREATE, params).toPromise();
 	}
 
-	deleteCodeReview(reviewId: ICodeReview) {
+	deleteCodeReview(reviewId: number) {
 		const { accessToken } = getTokensFromStorage();
 
 		const params = {

@@ -16,6 +16,7 @@ export class ListReposUserComponent implements OnInit {
 	public per_page = 5;
 	public page = 1;
 	public loading = false;
+
 	public searchText!: string;
 
 	private typingTimer: any;

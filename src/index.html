@@ -16,7 +16,9 @@
 </head>
 
 <body>
-	<app-root></app-root>
+	<div (window:resize)="onResize($event)">
+		<app-root></app-root>
+	</div>
 </body>
 
 </html>

@@ -34,7 +34,9 @@ export class AppComponent implements OnInit {
 		this._loginUrl = v;
 	}
 
-	constructor(private dataService: DisplayDashboardService, private authService: AuthService) { }
+	constructor(private dataService: DisplayDashboardService, private authService: AuthService) {
+		this.showLateral = true;
+	}
 
 	ngOnInit(): void {
 		const size = window.innerWidth;
@@ -59,7 +61,6 @@ export class AppComponent implements OnInit {
 	 * @param state
 	 */
 	public initSocket(state: string): void {
-		// TODO: add in config
 		this.socket = socketIo(environment.authUrl);
 		this.socket.on(state, (message: any) => {
 			this.login(message.token, message.githubToken, (success: boolean) => {
@@ -71,7 +72,6 @@ export class AppComponent implements OnInit {
 				}
 			});
 		});
-
 	}
 
 	private checkLogin() {

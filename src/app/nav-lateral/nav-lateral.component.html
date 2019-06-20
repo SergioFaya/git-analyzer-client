@@ -11,9 +11,20 @@
 			<ul class="uk-nav uk-nav-default">
 				<li class="uk-nav-header">Dashboard</li>
 				<li class="uk-parent">
-					<!--<a href="#">Parent</a>-->
 					<ul class="uk-nav-sub">
-						<li><a (click)="displayRepoList()">List Repos</a></li>
+						<li (click)="displayLanding()" class="">
+							<a href="#"><span class="uk-margin-small-right" uk-icon="icon: home"></span>Home</a>
+						</li>
+						<li (click)="displayRepoList()">
+							<a href="#"><span class="uk-margin-small-right" uk-icon="icon: git-branch"></span>Repos</a>
+						</li>
+						<li (click)="displayOrganizations()">
+							<a href="#"><span class="uk-margin-small-right" uk-icon="icon: git-fork"></span>Orgs</a>
+						</li>
+						<li (click)="displayCodeReview()">
+							<a href="#"><span class="uk-margin-small-right" uk-icon="icon: comments"></span>Reviews</a>
+						</li>
+
 					</ul>
 				</li>
 				<li class="uk-nav-divider"></li>
