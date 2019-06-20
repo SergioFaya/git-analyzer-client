@@ -1,19 +1,45 @@
 <div id="nav-greater-960">
-	<nav class="uk-navbar-container uk-light" uk-navbar style="background-color: #191919;">
-		<div class="uk-navbar-left">
+	<nav class="uk-navbar-container uk-light nav-color-black" uk-navbar>
+		<div *ngIf="logged" class="uk-navbar-left">
 			<ul class="uk-navbar-nav">
-				<!-- REPOS -->
+
+				<!-- HOME 
+				<li class="uk-margin-left">
+					<i class=" fas fa-home fa-2x" (click)="displayLanding()"></i>
+				</li>
+				-->
+				<!-- REPOS 
 				<li class="uk-margin-left">
 					<button class="uk-button uk-button-secondary" (click)="displayRepoList()">List Repositories</button>
 				</li>
-				<!-- ORGS -->
+				-->
+				<!-- ORGS 
 				<li class="uk-margin-left">
 					<button class="uk-button uk-button-secondary" (click)="displayOrganizations()">List
 						Organizations</button>
 				</li>
-				<!-- CODE REVIEWS -->
+				-->
+				<!-- CODE REVIEWS 
 				<li class="uk-margin-left">
 					<button class="uk-button uk-button-secondary" (click)="displayCodeReview()"> Code Reviews</button>
+				</li>
+				-->
+
+				<li class="uk-navbar-item custom-nav-height" (click)="displayLanding()">
+					<a class="custom-nav-height" class="" href="#"><span class="uk-margin-small-right"
+							uk-icon="icon: home"></span>Home</a>
+				</li>
+				<li class="uk-navbar-item custom-nav-height" (click)="displayRepoList()">
+					<a class="custom-nav-height" href="#"><span class="uk-margin-small-right"
+							uk-icon="icon: git-branch"></span>Repos</a>
+				</li>
+				<li class="uk-navbar-item custom-nav-height" (click)="displayOrganizations()">
+					<a class="custom-nav-height" href="#"><span class="uk-margin-small-right"
+							uk-icon="icon: git-fork"></span>Orgs</a>
+				</li>
+				<li class="uk-navbar-item custom-nav-height" (click)="displayCodeReview()">
+					<a class="custom-nav-height" href="#"><span class="uk-margin-small-right"
+							uk-icon="icon: comments"></span>Reviews</a>
 				</li>
 			</ul>
 		</div>
@@ -21,12 +47,11 @@
 			<ul class="uk-navbar-nav">
 				<li>
 					<!-- LOGGED -->
-					<img *ngIf="logged" src="{{imageUrl}}" alt="profile-image"
+					<img *ngIf="logged" [src]="imageUrl" alt="profile-image"
 						class="uk-icon-button uk-margin-small-right uk-margin-small-top uk-margin-small" />
 					<div *ngIf="logged" class="uk-navbar-dropdown">
 						<ul class="uk-nav uk-navbar-dropdown-nav">
 							<li class="uk-nav-header">User</li>
-							<!--FIXME:  añadir el client_id para que llegue a la app directamente-->
 							<li>
 								<a href="https://github.com/settings/connections/applications/{{client_id}}">
 									<span class="uk-margin-small-right" uk-icon="icon: cog"></span>Config
@@ -41,7 +66,6 @@
 						</ul>
 					</div>
 					<!-- NOT LOGGED -->
-					<!-- TODO: REVISAR EL UK-ICON POR EL SIZE DEL NAV-->
 					<a *ngIf="!logged" target="blank" rel="noopener noreferrer" href="{{loginUrl}}"
 						uk-icon="icon: user">Log in</a>
 				</li>

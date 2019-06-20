@@ -16,18 +16,19 @@ export class NavFullComponent implements OnInit {
 	imageUrl?: string;
 	logged?: boolean;
 
-	constructor(private dataService: DisplayDashboardService) { }
+	constructor(private dataService: DisplayDashboardService) { this.imageUrl = ''; }
 
 	ngOnInit() {
 		this.logged = localStorage.getItem(Keys.LOGGED) == Keys.LOGGED;
 		this.dataService.logged.subscribe((logged) => {
 			this.logged = localStorage.getItem(Keys.LOGGED) == Keys.LOGGED;
 		});
-		this.asignImageUrl()
-		this.dataService.image.subscribe(() => {
-			//this.imageUrl = localStorage.getItem('avatarUrl') as string;
-			this.asignImageUrl();
-		});
+		if (this.logged) {
+			this.asignImageUrl()
+			this.dataService.image.subscribe(() => {
+				this.asignImageUrl();
+			});
+		}
 	}
 
 	private asignImageUrl(): void {
@@ -47,6 +48,9 @@ export class NavFullComponent implements OnInit {
 		this.dataService.showDashboard(DisplayDashboardService.codeReview);
 	}
 
+	displayLanding() {
+		this.dataService.showDashboard(DisplayDashboardService.landing);
+	}
 }
 
 

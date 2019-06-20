@@ -5,7 +5,7 @@ import { environment } from '../environments/environment';
 import { Keys } from './models/Keys';
 import { AuthService } from './services/AuthService/auth.service';
 import { DisplayDashboardService } from './services/DisplayEvents/display-data.service';
-import { notify } from './util/util';
+import { getTokensFromStorage, notify } from './util/util';
 
 @Component({
 	selector: 'app-root',
@@ -15,14 +15,14 @@ import { notify } from './util/util';
 
 export class AppComponent implements OnInit {
 	// @ts-ignore
-	socket: SocketIOClient.Socket;
-	showLateral: boolean | undefined;
-	showFull: boolean | undefined;
+	private socket: SocketIOClient.Socket;
 
-	logged: boolean | undefined;
-	imageUrl: string | undefined;
+	public showLateral: boolean | undefined;
+	public showFull: boolean | undefined;
 
-	// TODO: sacar url y paths a config
+	private logged: boolean | undefined;
+	public imageUrl: string | undefined;
+
 	readonly AUTH_SERVICE_URL = environment.authUrl;
 	readonly SERVER_SERVICE_URL = environment.serverUrl;
 
@@ -34,7 +34,9 @@ export class AppComponent implements OnInit {
 		this._loginUrl = v;
 	}
 
-	constructor(private dataService: DisplayDashboardService, private authService: AuthService) { }
+	constructor(private dataService: DisplayDashboardService, private authService: AuthService) {
+		this.showLateral = true;
+	}
 
 	ngOnInit(): void {
 		const size = window.innerWidth;
@@ -45,6 +47,9 @@ export class AppComponent implements OnInit {
 		this.dataService.logged.subscribe((logged) => {
 			this.logged = localStorage.getItem(Keys.LOGGED) == Keys.LOGGED;
 		});
+		if (this.logged) {
+			this.checkLogin();
+		}
 	}
 
 	get logoutFunc() {
@@ -56,10 +61,33 @@ export class AppComponent implements OnInit {
 	 * @param state
 	 */
 	public initSocket(state: string): void {
-		this.socket = socketIo('http://localhost:3000');
+		this.socket = socketIo(environment.authUrl);
 		this.socket.on(state, (message: any) => {
-			this.login(message.token, message.githubToken);
+			this.login(message.token, message.githubToken, (success: boolean) => {
+				if (success) {
+					this.dataService.showDashboard(DisplayDashboardService.landing);
+					window.location.reload();
+				} else {
+					notify('Cannot show landing page, please refresh or try to log in again');
+				}
+			});
 		});
+	}
+
+	private checkLogin() {
+		this.authService
+			.checkLogin()
+			.then((result: any) => {
+				if (result.expired === false) {
+					this.dataService.showDashboard(DisplayDashboardService.landing);
+				}
+			}).catch((err) => {
+				console.log(err);
+				const { accessToken } = getTokensFromStorage();
+				if (accessToken) {
+					this.logOut();
+				}
+			});
 	}
 
 	private getLoginUrl() {
@@ -72,7 +100,7 @@ export class AppComponent implements OnInit {
 			}).catch(err => new Error(err));
 	}
 
-	private login(token: string, githubToken: string) {
+	private login(token: string, githubToken: string, callback: Function) {
 		this.storeTokens(token, githubToken)
 		localStorage.setItem(Keys.LOGGED, Keys.LOGGED);
 		this.dataService.loggedUser(true);
@@ -80,8 +108,12 @@ export class AppComponent implements OnInit {
 			.then((userData: IUserData) => {
 				localStorage.setItem(Keys.USER_DATA, JSON.stringify(userData));
 				this.dataService.imageUrlContent(userData.imageUrl!);
+				callback(true);
 			})
-			.catch((err: Error) => console.log(err));
+			.catch((err: Error) => {
+				console.log(err);
+				callback(false);
+			});
 	}
 
 	public logOut() {
@@ -108,11 +140,6 @@ export class AppComponent implements OnInit {
 		this.socket.emit(event, { socket: this.socket, message: message });
 	}
 
-	onResize(event: any): void {
-		const size = event.target.innerWidth;
-		this.adaptToSize(size);
-	}
-
 	private adaptToSize(size: number): void {
 		if (size < 960) {
 			this.showLateral = true;
@@ -121,6 +148,11 @@ export class AppComponent implements OnInit {
 			this.showLateral = false;
 			this.showFull = true;
 		}
+	}
+
+	onResize(event: any): void {
+		const size = event.target.innerWidth;
+		this.adaptToSize(size);
 	}
 }
 

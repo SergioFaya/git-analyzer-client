@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { IDecoratedCommit } from 'git-analyzer-types';
 import { getTokensFromStorage, getUserDataFromLocalStorage } from 'src/app/util/util';
 import { environment } from '../../../environments/environment';
 
@@ -64,7 +65,7 @@ export class RepoService {
 		if (username) {
 			name = username;
 		} else {
-			name = localStorage.getItem('username') as string;
+			name = getUserDataFromLocalStorage().username as string;
 		}
 
 		const headers = {
@@ -72,12 +73,14 @@ export class RepoService {
 			'x-access-token': accessToken,
 			'x-github-token': githubToken
 		};
-		const params: HttpParams = new HttpParams({
+
+		const params = new HttpParams({
 			fromObject: {
-				name,
-				search
-			},
-		});
+				'username': name,
+				'search': search
+			}
+		})
+
 		const httpOptions = {
 			headers: new HttpHeaders(headers),
 			params,
@@ -112,7 +115,6 @@ export class RepoService {
 		const httpOptions = {
 			headers: new HttpHeaders(headers)
 		};
-		console.log(githubToken);
-		return this.http.get(this.SERVER_SERVICE_URL + this.COMMITS, httpOptions).toPromise();
+		return this.http.get<IDecoratedCommit>(this.SERVER_SERVICE_URL + this.COMMITS, httpOptions).toPromise();
 	}
 }
