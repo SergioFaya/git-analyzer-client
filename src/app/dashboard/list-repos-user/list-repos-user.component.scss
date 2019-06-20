@@ -1,7 +1,6 @@
 $uk-primary-color: #fff;
 
 .search-box{
-	// FIXME: no resuelve el import del color
 	background-color: $uk-primary-color;
 }
 
@@ -11,4 +10,14 @@ $uk-primary-color: #fff;
 
 .pagination-no-margin {
 	margin-bottom: 0px !important; 
+}
+
+.bold-th {
+	padding: 16px 12px;
+    text-align: left;
+    vertical-align: bottom;
+    font-size: 0.875rem;
+    font-weight: bolder;
+    color: #999;
+    text-transform: uppercase;
 }

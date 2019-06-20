@@ -5,6 +5,35 @@
 <app-nav-full [logout]="logoutFunc" [loginUrl]="loginUrl" *ngIf="showFull"></app-nav-full>
 <app-dashboard *ngIf="logged"></app-dashboard>
 
+
 <div *ngIf="!logged">
-	<h1>Please Log in</h1>
+	<div class="uk-container">
+		<h1 class="uk-heading-bullet uk-heading-divider">Welcome</h1>
+
+		<p>With this app you can evaluate the contributions under your different repos hosted on github in a quick and
+			easy way. Some of the features are:</p>
+
+		<ul class="uk-list uk-list-bullet">
+			<li>To see number of additions and deletions over the week</li>
+			<li>To see the git network chart</li>
+			<li>Display recent activity of issues, pull requests</li>
+		</ul>
+
+		<dl class="uk-description-list">
+			<dt>Instruccions:</dt>
+			<dd class="uk-margin-small-left">1.- Give the <a target="blank" rel="noopener noreferrer"
+					href="https://github.com/apps/git-analyzer/installations/new">github app</a> access to your
+				repositories (you can skip this step, but is necessary to use some features like the recent activity
+				tabs of issues and pull requests)</dd>
+			<dd class="uk-margin-small-left">2.- Login into the app (in order to evaluate the repos we need access to
+				your account) </dd>
+			<dd class="uk-margin-small-left">3.- The login process will be performed using your github credentials (we
+				dont have access to your password only to an access token) </dd>
+			<dd class="uk-margin-small-left">4.- Know you can start using the app, </dd>
+		</dl>
+
+	</div>
+
+
+
 </div>

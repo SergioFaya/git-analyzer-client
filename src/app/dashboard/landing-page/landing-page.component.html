@@ -1,10 +1,25 @@
 <div class="uk-container">
+
 	<h1>Recent Activity</h1>
+
+	<div class="uk-card uk-card-default uk-margin-top uk-margin-bottom">
+		<script src="https://cdn.rawgit.com/IonicaBizau/github-calendar/gh-pages/dist/github-calendar.min.js">
+		</script>
+		<!-- Optionally, include the theme (if you don't want to struggle to write the CSS) -->
+		<!-- <link rel="stylesheet" href="https://cdn.rawgit.com/IonicaBizau/github-calendar/gh-pages/dist/github-calendar.css" /> -->
+		<link rel="stylesheet"
+			href="https://cdn.rawgit.com/IonicaBizau/github-calendar/gh-pages/dist/github-calendar-responsive.css" />
+		<!-- Prepare a container for your calendar. -->
+		<div class="calendar">
+			<!-- Loading stuff -->
+			Loading the data of your recent contributions.
+		</div>
+	</div>
 
 	<ul uk-tab>
 		<li><a href="#">Issues</a></li>
 		<li><a href="#">Pull Requests</a></li>
-		<li><a href="#">Pulls</a></li>
+		<li><a href="#">Pushes</a></li>
 	</ul>
 
 	<ul class="uk-switcher uk-margin">
@@ -12,37 +27,153 @@
 			<div class="uk-container">
 				<div *ngFor="let issue of issues;">
 					<div class="uk-card uk-card-default">
-						<div class="uk-card-body uk-padding-small">
-							<h5 class="h-five-small-margin">{{issue.timestamp}} <span class="uk-badge">new</span></h5>
+						<div class="uk-card-header uk-padding-remove">
+							<div class="uk-position-right">
+								<span *ngIf="isFromMinutesAgo(issue.timestamp)" class="uk-badge">NEW!</span>
+							</div>
+						</div>
+						<div class="uk-card-body uk-padding-small uk-margin-small-bottom styled-card">
+							<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+								<div>
+									Issue Title
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{issue.issue.title}}</span>
+								</div>
+								<div>
+									Repo
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{issue.repository.name}}</span>
+								</div>
+								<div>
+									Creator
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left"><a
+											href="https://github.com/{{issue.issue.user.login}}">{{issue.issue.user.login}}</a></span>
+								</div>
+								<div>
+									Date
+									<hr class="uk-margin-remove">
+									<span
+										class="uk-margin-small-left uk-text-small">{{parseDate(issue.timestamp)}}</span>
+								</div>
+								<div>
+									<span *ngIf="!issue.action" class="uk-badge uk-width-expand">General</span>
+									<span *ngIf="issue.action" class="uk-badge uk-width-expand">{{issue.action}}</span>
+								</div>
+								<div>
+									<a href="{{issue.issue.html_url}}">View in github</a>
+								</div>
+							</div>
 						</div>
 					</div>
 				</div>
 			</div>
-
 		</li>
 
-		<li>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+		<li>
+			<div class="uk-container">
+				<div *ngFor="let pr of pullRequests;">
+					<div class="uk-card uk-card-default">
+						<div class="uk-card-header uk-padding-remove">
+							<div class="uk-position-right">
+								<span *ngIf="isFromMinutesAgo(pr.timestamp)" class="uk-badge">NEW!</span>
+							</div>
+						</div>
+						<div class="uk-card-body uk-padding-small uk-margin-small-bottom styled-card">
+							<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+								<div>
+									Title
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{pr.pull_request.title}}</span>
+								</div>
+								<div>
+									Repo
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{pr.repository.name}}</span>
+								</div>
+								<div>
+									Base
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{pr.pull_request.base.ref}}</span>
+								</div>
+								<div>
+									Head
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{pr.pull_request.head.ref}}</span>
+								</div>
+								<div>
+									Creator
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left"><a
+											href="https://github.com/{{pr.pull_request.user.login}}">{{pr.pull_request.user.login}}</a></span>
+								</div>
+								<div>
+									Date
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left uk-text-small">{{parseDate(pr.timestamp)}}</span>
+								</div>
+								<div>
+									<span *ngIf="!pr.action" class="uk-badge uk-width-expand">General</span>
+									<span *ngIf="pr.action" class="uk-badge uk-width-expand">{{pr.action}}</span>
+								</div>
+								<div>
+									<a href="{{pr.pull_request.html_url}}">View in github</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</li>
-		<li>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur, sed
-			do eiusmod.</li>
+
+		<li>
+			<div class="uk-container">
+				<div *ngFor="let commit of pushes;">
+					<div class="uk-card uk-card-default">
+						<div class="uk-card-header uk-padding-remove">
+							<div class="uk-position-right">
+								<span *ngIf="isFromMinutesAgo(commit.timestamp)" class="uk-badge">NEW!</span>
+							</div>
+						</div>
+						<div class="uk-card-body uk-padding-small uk-margin-small-bottom styled-card">
+							<div class="uk-grid-small uk-child-width-expand@s" uk-grid>
+								<div>
+									Title
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{commit.head_commit.message}}</span>
+								</div>
+								<div>
+									Repo
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{commit.repository.name}}</span>
+								</div>
+								<div> Branch
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{commit.ref.split('/')[2]}}</span>
+								</div>
+								<div> Head Commit
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left">{{commit.head_commit.id.substring(0,8)}}</span>
+								</div>
+								<div> Committer
+									<hr class="uk-margin-remove">
+									<span class="uk-margin-small-left"><a
+											href="https://github.com/{{commit.pusher.name}}">{{commit.pusher.name}}</a></span>
+								</div>
+								<div>
+									Date
+									<hr class="uk-margin-remove">
+									<span
+										class="uk-margin-small-left uk-text-small">{{parseDate(commit.timestamp)}}</span>
+								</div>
+								<div>
+									<a href="{{commit.head_commit.url}}">View in github</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
 	</ul>
-
-
-	<div class="uk-card uk-card-default uk-margin-top uk-margin-bottom">
-		<!-- Prepare a container for your calendar. -->
-		<script src="https://cdn.rawgit.com/IonicaBizau/github-calendar/gh-pages/dist/github-calendar.min.js">
-		</script>
-
-		<!-- Optionally, include the theme (if you don't want to struggle to write the CSS) -->
-		<!-- <link rel="stylesheet" href="https://cdn.rawgit.com/IonicaBizau/github-calendar/gh-pages/dist/github-calendar.css" /> -->
-
-		<link rel="stylesheet"
-			href="https://cdn.rawgit.com/IonicaBizau/github-calendar/gh-pages/dist/github-calendar-responsive.css" />
-
-		<!-- Prepare a container for your calendar. -->
-		<div class="calendar">
-			<!-- Loading stuff -->
-			Loading the data just for you.
-		</div>
-	</div>
 </div>

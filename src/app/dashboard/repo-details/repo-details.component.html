@@ -10,7 +10,7 @@
 	<div
 		class="uk-card uk-card-default uk-card-body uk-panel uk-panel-scrollable uk-height-max-large custom-scroll-panel uk-margin-top uk-margin-bottom">
 		<div #gitGraph></div>
-		<button class="uk-button" (click)="this.loadNetworkGraph();">Reload Network Chart</button>
+		<button class="uk-button uk-button-primary" (click)="this.loadNetworkGraph();">Reload Network Chart</button>
 	</div>
 	<!-- DATA TABLE -->
 	<div class="uk-card uk-card-default">
@@ -68,17 +68,24 @@
 					width="inherit" height="300px"></canvas></div>
 		</div>
 	</div>
+
+	<button (click)="this.getContributorsForCharts(this.repo.full_name!)" class="uk-button uk-button-primary">Reload
+		Contributors</button>
+
 </div>
 
 <!-- HIDDEN TOOLTIP -->
-<div #overTooltip class="uk-card uk-card-default uk-card-body uk-width-1-3@m node-tooltip hide-tooltip">
-	<h4 class="uk-card-title">Default</h4>
+<div #overTooltip
+	class="uk-card uk-card-default uk-card-body uk-width-1-3@m node-tooltip hide-tooltip uk-padding-small">
 	<dl>
 		<dt>Commit</dt>
-		<dd>{{tooltip}}</dd>
-		<dd>message</dd>
-		<dd>DAte</dd>
+		<dd class="uk-margin-medium-left">SHA: {{tooltip.sha}}</dd>
+		<dd class="uk-margin-medium-left">Message: {{tooltip.message}}</dd>
+		<dd class="uk-margin-medium-left">Date: {{tooltip.date}}</dd>
 		<dt>Committer</dt>
-		<dd>SergioFaya</dd>
+		<dd class="uk-margin-medium-left">Name: {{tooltip.committer}}</dd>
+		<dt>Changes</dt>
+		<dd class="uk-margin-medium-left">
+			<a href="{{tooltip.url}}">See detailed</a></dd>
 	</dl>
 </div>
