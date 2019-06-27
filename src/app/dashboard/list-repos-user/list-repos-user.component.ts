@@ -70,7 +70,7 @@ export class ListReposUserComponent implements OnInit {
 			});
 	}
 
-	// on keyup start the countdown 
+	// on keyup start the countdown
 	searchKeyUp(_event: any) {
 		clearTimeout(this.typingTimer);
 		this.typingTimer = setTimeout(() => {

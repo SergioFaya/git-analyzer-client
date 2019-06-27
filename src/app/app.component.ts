@@ -20,7 +20,7 @@ export class AppComponent implements OnInit {
 	public showLateral: boolean | undefined;
 	public showFull: boolean | undefined;
 
-	private logged: boolean | undefined;
+	public logged: boolean | undefined;
 	public imageUrl: string | undefined;
 
 	readonly AUTH_SERVICE_URL = environment.authUrl;
@@ -155,4 +155,3 @@ export class AppComponent implements OnInit {
 		this.adaptToSize(size);
 	}
 }
-

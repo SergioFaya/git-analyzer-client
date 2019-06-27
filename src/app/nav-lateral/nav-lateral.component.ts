@@ -1,3 +1,4 @@
+import { environment } from 'src/environments/environment';
 import { Component, Input, OnInit } from '@angular/core';
 // @ts-ignore
 import * as UIkit from 'uikit';
@@ -17,7 +18,12 @@ export class NavLateralComponent implements OnInit {
 	imageUrl?: string;
 	logged?: boolean;
 
-	constructor(private dataService: DisplayDashboardService) { }
+	client_id!: string;
+
+	constructor(private dataService: DisplayDashboardService) {
+		this.client_id = environment.client_id
+
+	}
 
 	ngOnInit() {
 		this.logged = localStorage.getItem(Keys.LOGGED) == Keys.LOGGED;

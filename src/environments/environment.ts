@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   authUrl: 'http://localhost:3000',
   serverUrl: 'http://localhost:3001',
+  client_id: 'c4c42af4e127583d6c40'
 };
 
 /*

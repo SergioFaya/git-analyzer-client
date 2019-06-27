@@ -3,6 +3,7 @@ import { IUserData } from 'git-analyzer-types';
 import { Keys } from '../models/Keys';
 import { DisplayDashboardService } from '../services/DisplayEvents/display-data.service';
 import { getUserDataFromLocalStorage } from '../util/util';
+import { environment } from 'src/environments/environment';
 @Component({
 	selector: 'app-nav-full',
 	templateUrl: './nav-full.component.html',
@@ -15,8 +16,12 @@ export class NavFullComponent implements OnInit {
 	@Input() loginUrl!: string;
 	imageUrl?: string;
 	logged?: boolean;
+	client_id!: string;
 
-	constructor(private dataService: DisplayDashboardService) { this.imageUrl = ''; }
+	constructor(private dataService: DisplayDashboardService) {
+		this.imageUrl = '';
+		this.client_id = environment.client_id
+ 	}
 
 	ngOnInit() {
 		this.logged = localStorage.getItem(Keys.LOGGED) == Keys.LOGGED;
@@ -52,5 +57,3 @@ export class NavFullComponent implements OnInit {
 		this.dataService.showDashboard(DisplayDashboardService.landing);
 	}
 }
-
-
