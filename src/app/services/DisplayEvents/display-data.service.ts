@@ -44,7 +44,6 @@ export class DisplayDashboardService {
 
 	detailedRepo(repo: IRepo) {
 		this.repoDetailedContent.next(repo);
-		// localStorage.setItem('repoDetailed', repo);
 	}
 
 	loggedUser(logged: boolean) {
