@@ -9,8 +9,8 @@
 			<img *ngIf="logged" src="{{imageUrl}}" alt="profile-image"
 				class="uk-icon-button uk-margin-small-top uk-margin-small" style="height: 85px; width: 85px;" />
 			<ul class="uk-nav uk-nav-default">
-				<li class="uk-nav-header">Dashboard</li>
-				<li class="uk-parent">
+				<li *ngIf="logged" class="uk-nav-header">Dashboard</li>
+				<li *ngIf="logged" class="uk-parent">
 					<ul class="uk-nav-sub">
 						<li (click)="displayLanding()" class="">
 							<a href="#"><span class="uk-margin-small-right" uk-icon="icon: home"></span>Home</a>
@@ -32,7 +32,7 @@
 				<li><a *ngIf="!logged" href="{{loginUrl}}" target="blank" rel="noopener noreferrer"><span
 							class="uk-margin-small-right" uk-icon="icon: user"></span>Log in</a>
 				</li>
-				<li><a href="https://github.com/settings/connections/applications/{{client_id}}"><span
+				<li><a *ngIf="logged" href="https://github.com/settings/connections/applications/{{client_id}}"><span
 							class="uk-margin-small-right" uk-icon="icon: cog"></span>Config</a></li>
 				<li (click)="logout()"><a *ngIf="logged"><span class="uk-margin-small-right"
 							uk-icon="icon: user"></span>Log Out</a></li>
