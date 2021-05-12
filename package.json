@@ -25,7 +25,7 @@
     "@types/socket.io-client": "^1.4.32",
     "@types/superagent": "^3.8.4",
     "@types/uikit": "^2.27.7",
-    "chart.js": "^2.7.3",
+    "chart.js": "^2.9.4",
     "core-js": "^2.5.4",
     "express": "^4.17.1",
     "git-analyzer-types": "^1.2.6",
